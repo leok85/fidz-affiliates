@@ -1,0 +1,233 @@
+/* Blocos reaproveitados pelas telas do painel. Nomes: block__element_modifier (só underscore). */
+
+.pageHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.pageHeader__title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: var(--tracking-title);
+}
+
+.pageHeader__subtitle {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: var(--leading-dense);
+}
+
+.card {
+  background: var(--surface-card);
+  border-radius: var(--radius-card);
+  padding: 22px;
+  min-width: 0;
+}
+
+.card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.card__title {
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.link {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: var(--text-meta);
+  font-weight: 600;
+  color: var(--fidz-purple);
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.metric {
+  background: var(--surface-card);
+  border-radius: var(--radius-card);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.metric__label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-soft);
+}
+
+.metric__value {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: var(--tracking-title);
+}
+
+.metric__value_purple {
+  color: var(--fidz-purple);
+}
+
+.metric__note {
+  font-size: var(--text-caption);
+  color: var(--text-soft);
+}
+
+/* Tabelas: cabeçalho e linhas com o mesmo grid, definido pela tela (grid-template-columns). */
+.table {
+  background: var(--surface-card);
+  border-radius: var(--radius-card);
+  padding: 8px 22px;
+}
+
+.table__head {
+  display: grid;
+  gap: 14px;
+  padding: 12px 0;
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.table__row {
+  display: grid;
+  gap: 14px;
+  padding: 14px 0;
+  border-top: 1px solid rgba(37, 37, 37, .06);
+  align-items: center;
+  font-size: 13px;
+}
+
+.table__right {
+  text-align: right;
+}
+
+.table__strong {
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+}
+
+.table__sub {
+  font-size: var(--text-caption);
+  color: var(--text-soft);
+}
+
+.table__empty {
+  padding: 40px 0;
+  text-align: center;
+  font-size: var(--text-body-sm);
+  color: var(--text-soft);
+  border-top: 1px solid rgba(37, 37, 37, .06);
+}
+
+/* Modais */
+.modal__title {
+  font-size: var(--text-subtitle);
+  font-weight: 700;
+}
+
+.modal__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.modal__note {
+  font-size: 12px;
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
+.modal__error {
+  font-size: 12.5px;
+  color: var(--danger);
+}
+
+.details {
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: var(--text-meta);
+}
+
+.details__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.details__label {
+  color: var(--text-soft);
+}
+
+.details__value {
+  font-weight: 600;
+  text-align: right;
+}
+
+.loading {
+  font-size: var(--text-body-sm);
+  color: var(--text-soft);
+}
+
+@media (max-width: 900px) {
+  .pageHeader {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .pageHeader__title {
+    font-size: 22px;
+  }
+
+  .metricGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .metric {
+    padding: 14px;
+  }
+
+  .metric__value {
+    font-size: 21px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .table {
+    padding: 4px 16px;
+  }
+
+  .table__head {
+    display: none;
+  }
+}

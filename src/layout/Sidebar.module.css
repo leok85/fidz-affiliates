@@ -1,0 +1,160 @@
+/* Menu "Escuro" do design. Cores sem token: #CFCAD6 (item), #A9A3B3 (linha de apoio). */
+.sidebar {
+  width: var(--width-sidebar);
+  flex: none;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background: var(--fidz-charcoal);
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px 22px;
+}
+
+.sidebar__brand {
+  padding: 20px 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sidebar__logo {
+  width: 78px;
+  height: auto;
+  display: block;
+}
+
+.sidebar__tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--fidz-yellow);
+}
+
+.sidebar__nav {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar__navItem {
+  padding: 11px 12px;
+  border-radius: 12px;
+  color: #CFCAD6;
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+}
+
+.sidebar__navItem:hover {
+  color: #fff;
+}
+
+.sidebar__navItem_active,
+.sidebar__navItem_active:hover {
+  background: var(--fidz-yellow);
+  color: var(--fidz-charcoal);
+  font-weight: 600;
+}
+
+.sidebar__footer {
+  margin-top: auto;
+  border-top: 1px solid var(--border-on-dark);
+  padding-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar__avatar {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: var(--radius-pill);
+  background: var(--fidz-purple);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-meta);
+  font-weight: 600;
+}
+
+.sidebar__identity {
+  flex: 1;
+  min-width: 0;
+}
+
+.sidebar__name {
+  font-size: var(--text-meta);
+  font-weight: 600;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar__since {
+  font-size: 10.5px;
+  color: #A9A3B3;
+}
+
+.sidebar__logout {
+  cursor: pointer;
+  flex: none;
+  border: none;
+  background: none;
+  padding: 6px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fidz-yellow);
+}
+
+.sidebar__close {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 40;
+    height: auto;
+    width: min(300px, 86vw);
+    box-shadow: 0 16px 48px rgba(24, 12, 40, 0.22);
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition: transform 0.22s ease, visibility 0.22s;
+    overflow-y: auto;
+  }
+
+  .sidebar_open {
+    transform: none;
+    visibility: visible;
+  }
+
+  .sidebar__tag {
+    margin-left: auto;
+  }
+
+  .sidebar__close {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    margin-right: -8px;
+    border: none;
+    background: none;
+    color: #CFCAD6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar__navItem {
+    padding: 13px 12px;
+  }
+}
