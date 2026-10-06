@@ -19,8 +19,8 @@ export function IncomeReportScreen() {
   }, [years, year]);
   const { data: report } = useQuery({
     queryKey: ['income-report', year],
-    queryFn: () => fetchIncomeReport(year!),
-    enabled: year !== null
+    queryFn: () => fetchIncomeReport(year!, profile!.since),
+    enabled: year !== null && profile !== undefined
   });
 
   if (profile?.personType === 'PJ') return <Navigate to="/" replace />;

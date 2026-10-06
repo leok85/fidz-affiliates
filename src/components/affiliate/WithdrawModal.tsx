@@ -16,7 +16,7 @@ export function WithdrawModal({ profile, available, onClose }: { profile: Affili
   const [invoice, setInvoice] = useState<File | null>(null);
 
   const withdraw = useMutation({
-    mutationFn: () => requestWithdrawal({ invoice }),
+    mutationFn: () => requestWithdrawal({ invoice, personType: profile.personType }),
     onSuccess: () => {
       for (const key of ['balance', 'ledger', 'income-report']) queryClient.invalidateQueries({ queryKey: [key] });
     }

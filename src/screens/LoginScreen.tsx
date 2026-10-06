@@ -9,12 +9,13 @@ const SIGNUP_URL = 'https://fidz.com.br/afiliados';
 const EMAIL_RE = /.+@.+\..+/;
 
 export function LoginScreen() {
-  const { sendCode, verifyCode } = useAuth();
+  const { sendCode, verifyCode, authError } = useAuth();
   const [step, setStep] = useState<'email' | 'code'>('email');
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [codeError, setError] = useState<string | null>(null);
+  const error = codeError ?? authError;
   const [resent, setResent] = useState(false);
 
   const emailOk = EMAIL_RE.test(email.trim());

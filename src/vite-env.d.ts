@@ -10,6 +10,5 @@ interface ImportMeta {
 }
 
 interface ImportMetaEnv {
-  readonly VITE_DEMO_PERSON_TYPE?: 'PF' | 'PJ';
   readonly VITE_DEMO_INVOICE_REJECTED?: 'true' | 'false';
 }

@@ -2,6 +2,8 @@ export type Tone = 'neutral' | 'success' | 'warning' | 'danger' | 'purple' | 'in
 
 export type PersonType = 'PF' | 'PJ';
 
+export type AffiliateAccess = { status: 'active'; profile: AffiliateProfile } | { status: 'disabled' | 'missing' };
+
 export interface AffiliateProfile {
   name: string;
   email: string;
@@ -44,6 +46,7 @@ export interface LedgerEntry {
   date: string;
   kind: 'commission' | 'withdrawal';
   store: string | null;
+  /** Commissions only; withdrawals show the affiliate's Pix key. */
   description: string;
   status: LedgerStatus;
   /** Commissions in grace: when they become available. */

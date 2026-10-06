@@ -1,8 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchBalance, fetchLedger, fetchProfile, fetchReferrals, fetchRejectedInvoice } from './api';
+import { fetchAffiliateAccess, fetchBalance, fetchLedger, fetchReferrals, fetchRejectedInvoice } from './api';
 import { pointsFromCommissions } from './rules';
 
-export const useProfile = () => useQuery({ queryKey: ['profile'], queryFn: fetchProfile });
+export const useAffiliateAccess = (enabled = true) => useQuery({ queryKey: ['profile'], queryFn: fetchAffiliateAccess, enabled });
+
+/** Only rendered inside the shell, which waits for an active affiliate. */
+export function useProfile() {
+  const query = useAffiliateAccess();
+  return { ...query, data: query.data?.status === 'active' ? query.data.profile : undefined };
+}
 export const useBalance = () => useQuery({ queryKey: ['balance'], queryFn: fetchBalance });
 export const useLedger = () => useQuery({ queryKey: ['ledger'], queryFn: fetchLedger });
 export const useReferrals = () => useQuery({ queryKey: ['referrals'], queryFn: fetchReferrals });

@@ -10,16 +10,16 @@ import { PromoScreen } from './screens/PromoScreen';
 import { IncomeReportScreen } from './screens/IncomeReportScreen';
 
 function RequireAuth() {
-  const { session, loading } = useAuth();
+  const { isAffiliate, loading } = useAuth();
   if (loading) return null;
-  if (!session) return <Navigate to="/login" replace />;
+  if (!isAffiliate) return <Navigate to="/login" replace />;
   return <AffiliateShell />;
 }
 
 function RedirectIfAuthed() {
-  const { session, loading } = useAuth();
+  const { isAffiliate, loading } = useAuth();
   if (loading) return null;
-  if (session) return <Navigate to="/" replace />;
+  if (isAffiliate) return <Navigate to="/" replace />;
   return <LoginScreen />;
 }
 

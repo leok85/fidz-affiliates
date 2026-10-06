@@ -16,10 +16,12 @@ export function EarningsScreen() {
   const { data: profile } = useProfile();
   const { data: balance } = useBalance();
   const { data: ledger } = useLedger();
-  const { data: rejected } = useRejectedInvoice();
+  const { data: demoRejected } = useRejectedInvoice();
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [resubmitOpen, setResubmitOpen] = useState(false);
 
+  // Nota fiscal só existe para PJ.
+  const rejected = profile?.personType === 'PJ' ? demoRejected : null;
   if (!profile || !balance) return <div className={shared.loading}>Carregando…</div>;
   const canWithdraw = balance.available >= MIN_WITHDRAWAL;
 
@@ -88,7 +90,7 @@ export function EarningsScreen() {
             <div key={l.id} className={cx(shared.table__row, styles.ledger__grid)}>
               <div className={styles.ledger__date}>{shortDate(l.date)}</div>
               <div className={styles.ledger__store}>{isWithdrawal ? 'Saque' : l.store}</div>
-              <div className={styles.ledger__desc}>{l.description}</div>
+              <div className={styles.ledger__desc}>{isWithdrawal ? `Pix para ${profile.pixKeyMasked}` : l.description}</div>
               <div className={styles.ledger__status}>
                 <Badge tone={badge.tone}>{badge.label}</Badge>
               </div>

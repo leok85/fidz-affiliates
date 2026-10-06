@@ -1,18 +1,46 @@
-import type { AffiliateProfile, Balance, IncomeReport, LedgerEntry, Referral, RejectedInvoice } from '../types';
+import type { AffiliateAccess, AffiliateProfile, Balance, IncomeReport, LedgerEntry, PersonType, Referral, RejectedInvoice } from '../types';
+import { supabase } from '../lib/supabaseClient';
 import { MONTHS_LONG } from '../utils/format';
 import { INVOICE_MAX_BYTES, MIN_WITHDRAWAL, PF_INSS_RATE } from './rules';
 import { demo } from './demo';
 
 /*
- * Todas as leituras e gravações do painel passam por aqui, como no fidz-admin. Hoje elas usam o
- * estado de exemplo de ./demo; quando o schema dos afiliados existir, cada função vira uma query
- * ou RPC do Supabase com o mesmo retorno, e as telas não mudam.
+ * Todas as leituras e gravações do painel passam por aqui, como no fidz-admin. O cadastro vem de
+ * public.affiliates; o resto ainda usa o estado de exemplo de ./demo, até o schema de indicações,
+ * comissões e saques existir. Cada função dessas vira uma query ou RPC com o mesmo retorno.
  */
 
 const wait = <T,>(value: T) => new Promise<T>((resolve) => setTimeout(() => resolve(structuredClone(value)), 200));
 
-export async function fetchProfile(): Promise<AffiliateProfile> {
-  return wait(demo.profile);
+/** "···.482.019-··" / "12.···.···/0001-··": only the middle of the CPF, the root of the CNPJ. */
+function maskDocument(personType: PersonType, digits: string) {
+  if (personType === 'PF') return `CPF ···.${digits.slice(3, 6)}.${digits.slice(6, 9)}-··`;
+  return `CNPJ ${digits.slice(0, 2)}.···.···/${digits.slice(8, 12)}-··`;
+}
+
+/** The signed-in user's affiliate row (RLS: user_id = auth.uid()). */
+export async function fetchAffiliateAccess(): Promise<AffiliateAccess> {
+  const { data, error } = await supabase
+    .from('affiliates')
+    .select('name, email, code, person_type, cpf, cnpj, status, created_at')
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return { status: 'missing' };
+  if (data.status !== 'active') return { status: 'disabled' };
+  const personType = data.person_type as PersonType;
+  const document = maskDocument(personType, (personType === 'PF' ? data.cpf : data.cnpj) ?? '');
+  const profile: AffiliateProfile = {
+    name: data.name,
+    email: data.email,
+    code: data.code,
+    link: `fidz.com.br/r/${String(data.code).toLowerCase()}`,
+    personType,
+    since: data.created_at,
+    documentMasked: document,
+    // Termos, seção 2: a chave Pix é o CPF ou CNPJ do cadastro.
+    pixKeyMasked: document
+  };
+  return { status: 'active', profile };
 }
 
 export async function fetchBalance(): Promise<Balance> {
@@ -35,8 +63,8 @@ export async function fetchIncomeYears(): Promise<number[]> {
   return wait([new Date().getFullYear()]);
 }
 
-export async function fetchIncomeReport(year: number): Promise<IncomeReport> {
-  const since = new Date(demo.profile.since);
+export async function fetchIncomeReport(year: number, sinceIso: string): Promise<IncomeReport> {
+  const since = new Date(sinceIso);
   const now = new Date();
   const firstMonth = since.getFullYear() === year ? since.getMonth() + 1 : 1;
   const lastMonth = now.getFullYear() === year ? now.getMonth() + 1 : 12;
@@ -60,8 +88,8 @@ export interface WithdrawalResult {
 }
 
 /** O saque é sempre do saldo disponível inteiro. PJ manda a nota fiscal junto. */
-export async function requestWithdrawal({ invoice }: { invoice: File | null }): Promise<WithdrawalResult> {
-  const pj = demo.profile.personType === 'PJ';
+export async function requestWithdrawal({ invoice, personType }: { invoice: File | null; personType: PersonType }): Promise<WithdrawalResult> {
+  const pj = personType === 'PJ';
   const gross = demo.balance.available;
   if (gross < MIN_WITHDRAWAL) throw new Error('Saque a partir de R$ 30.');
   if (pj && !invoice) throw new Error('Anexe a nota fiscal.');
@@ -75,7 +103,7 @@ export async function requestWithdrawal({ invoice }: { invoice: File | null }): 
     date: new Date().toISOString().slice(0, 10),
     kind: 'withdrawal',
     store: null,
-    description: `Pix para ${demo.profile.pixKeyMasked}`,
+    description: '',
     status: pj ? 'invoice_review' : 'processing',
     releasesAt: null,
     amount: -gross

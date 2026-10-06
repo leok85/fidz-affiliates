@@ -1,36 +1,25 @@
-import type { AffiliateProfile, IncomeReportMonth, LedgerEntry, PersonType, Referral, RejectedInvoice } from '../types';
+import type { IncomeReportMonth, LedgerEntry, Referral, RejectedInvoice } from '../types';
 
 /*
  * Dados de exemplo do painel, os mesmos do projeto de design ("Fidz - Programa de Afiliados").
- * O schema do programa de afiliados ainda não existe no Supabase (quem cria é o fidz-client-admin):
- * enquanto isso, src/data/api.ts lê e grava neste estado em memória. Para ver o fluxo de CNPJ,
- * use VITE_DEMO_PERSON_TYPE=PJ; para a nota recusada, VITE_DEMO_INVOICE_REJECTED=true.
+ * O cadastro do afiliado já vem do Supabase (public.affiliates); indicações, comissões, saques e
+ * metas ainda não têm tabela no schema (quem cria é o fidz-client-admin). Enquanto isso,
+ * src/data/api.ts lê e grava neste estado em memória. Para ver a nota recusada (só PJ),
+ * use VITE_DEMO_INVOICE_REJECTED=true.
  */
 
-const personType: PersonType = import.meta.env.VITE_DEMO_PERSON_TYPE === 'PJ' ? 'PJ' : 'PF';
 const year = new Date().getFullYear();
 const d = (md: string, y = year) => `${y}-${md}`;
 
 export const demo = {
-  profile: {
-    name: 'Marina Costa',
-    email: 'marina@gmail.com',
-    code: 'MARINA20',
-    link: 'fidz.com.br/r/marina20',
-    personType,
-    since: d('03-02'),
-    documentMasked: personType === 'PJ' ? 'CNPJ 12.···.···/0001-··' : 'CPF ···.482.019-··',
-    pixKeyMasked: personType === 'PJ' ? 'CNPJ 12.···.···/0001-··' : 'CPF ···.482.019-··'
-  } satisfies AffiliateProfile,
-
   ledger: [
     { id: 'l1', date: d('09-19'), kind: 'commission', store: 'Padaria Aurora', description: 'Mensalidade 5 de 12', status: 'grace', releasesAt: d('10-19'), amount: 19.8 },
     { id: 'l2', date: d('09-15'), kind: 'commission', store: 'Pet Shop Amigo', description: 'Mensalidade 12 de 12', status: 'grace', releasesAt: d('10-15'), amount: 19.8 },
     { id: 'l3', date: d('08-19'), kind: 'commission', store: 'Padaria Aurora', description: 'Mensalidade 4 de 12', status: 'available', releasesAt: null, amount: 19.8 },
-    { id: 'w2', date: d('08-12'), kind: 'withdrawal', store: null, description: `Pix para ${personType === 'PJ' ? 'CNPJ 12.···.···/0001-··' : 'CPF ···.482.019-··'}`, status: 'paid', releasesAt: null, amount: -198 },
+    { id: 'w2', date: d('08-12'), kind: 'withdrawal', store: null, description: '', status: 'paid', releasesAt: null, amount: -198 },
     { id: 'l4', date: d('08-08'), kind: 'commission', store: 'Barbearia Dom Zé', description: 'Anuidade', status: 'available', releasesAt: null, amount: 198 },
     { id: 'l5', date: d('08-05'), kind: 'commission', store: 'Açaí da Ilha', description: 'Mensalidade 2 de 12', status: 'available', releasesAt: null, amount: 19.8 },
-    { id: 'w1', date: d('06-20'), kind: 'withdrawal', store: null, description: `Pix para ${personType === 'PJ' ? 'CNPJ 12.···.···/0001-··' : 'CPF ···.482.019-··'}`, status: 'paid', releasesAt: null, amount: -214.5 },
+    { id: 'w1', date: d('06-20'), kind: 'withdrawal', store: null, description: '', status: 'paid', releasesAt: null, amount: -214.5 },
     { id: 'l6', date: d('06-15'), kind: 'commission', store: 'Pet Shop Amigo', description: 'Mensalidade 11 de 12', status: 'withdrawn', releasesAt: null, amount: 19.8 }
   ] as LedgerEntry[],
 
@@ -45,7 +34,7 @@ export const demo = {
     { id: 'r6', store: 'Studio Bela', signedUpAt: d('05-03'), via: 'link', plan: 'monthly', status: 'canceled', paidInstallments: 3, earned: 59.4 }
   ] as Referral[],
 
-  rejectedInvoice: (personType === 'PJ' && import.meta.env.VITE_DEMO_INVOICE_REJECTED === 'true'
+  rejectedInvoice: (import.meta.env.VITE_DEMO_INVOICE_REJECTED === 'true'
     ? { withdrawalId: 'w3', amount: 186.3, reason: 'Valor diferente do saque', resubmitted: false }
     : null) as RejectedInvoice | null,
 
@@ -58,7 +47,7 @@ export const demo = {
 
 if (demo.rejectedInvoice) {
   demo.ledger.unshift({
-    id: 'w3', date: d('09-21'), kind: 'withdrawal', store: null, description: 'Pix para CNPJ 12.···.···/0001-··',
+    id: 'w3', date: d('09-21'), kind: 'withdrawal', store: null, description: '',
     status: 'invoice_rejected', releasesAt: null, amount: -186.3
   });
 }
