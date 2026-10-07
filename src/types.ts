@@ -17,7 +17,8 @@ export interface AffiliateProfile {
   pixKeyMasked: string;
 }
 
-export type ReferralStatus = 'active' | 'trial' | 'completed' | 'canceled';
+/** 'late': the store stopped paying (past due, at risk or blocked for non-payment) but didn't cancel. */
+export type ReferralStatus = 'active' | 'trial' | 'late' | 'completed' | 'canceled';
 export type ReferralPlan = 'monthly' | 'yearly';
 
 export interface Referral {

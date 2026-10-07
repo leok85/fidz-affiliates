@@ -25,6 +25,7 @@ export function referralBadge(status: Referral['status']): { label: string; tone
   return {
     active: { label: 'Ativa', tone: 'success' as Tone },
     trial: { label: 'Em teste grátis', tone: 'warning' as Tone },
+    late: { label: 'Atrasada', tone: 'warning' as Tone },
     completed: { label: 'Comissão concluída', tone: 'purple' as Tone },
     canceled: { label: 'Cancelou', tone: 'neutral' as Tone }
   }[status];
