@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AffiliateProfile } from '../../types';
-import { requestWithdrawal } from '../../data/api';
-import { PAYER, PF_INSS_RATE } from '../../data/rules';
+import { previewPfTaxes, requestWithdrawal } from '../../data/api';
+import { PAYER } from '../../data/rules';
 import { brl } from '../../utils/format';
 import { Button } from '../core/Button';
 import { InvoicePicker } from '../core/InvoicePicker';
@@ -38,7 +38,7 @@ export function WithdrawModal({ profile, available, onClose }: { profile: Affili
     );
   }
 
-  const tax = available * PF_INSS_RATE;
+  const taxes = pj ? null : previewPfTaxes(available);
   const canConfirm = (!pj || invoice !== null) && !withdraw.isPending;
 
   return (
@@ -49,15 +49,21 @@ export function WithdrawModal({ profile, available, onClose }: { profile: Affili
           <span className={shared.details__label}>{pj ? 'Valor' : 'Valor bruto'}</span>
           <span className={styles.summary__amount}>{brl(available)}</span>
         </div>
-        {!pj && (
+        {taxes && (
           <>
             <div className={styles.summary__row}>
               <span className={shared.details__label}>INSS (11%) · RPA</span>
-              <span className={styles.summary__value}>− {brl(tax)}</span>
+              <span className={styles.summary__value}>− {brl(taxes.inss)}</span>
             </div>
+            {taxes.irrf > 0 && (
+              <div className={styles.summary__row}>
+                <span className={shared.details__label}>Imposto de Renda · RPA</span>
+                <span className={styles.summary__value}>− {brl(taxes.irrf)}</span>
+              </div>
+            )}
             <div className={styles.summary__row}>
               <span className={shared.details__label}>Você recebe</span>
-              <span className={styles.summary__net}>{brl(available - tax)}</span>
+              <span className={styles.summary__net}>{brl(taxes.net)}</span>
             </div>
           </>
         )}

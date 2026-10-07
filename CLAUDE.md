@@ -26,7 +26,10 @@ Supabase, com a mesma estrutura do fidz-admin e do fidz-client-admin.
   quem tem linha ativa em `affiliates`. O código vem no template "Magic Link" do Supabase
   (`{{ .Token }}`, fonte em `supabase-email-templates/magic-link.html` no fidz-client-admin), o
   mesmo e-mail dos donos de loja; vale 1 hora.
-- Regras do programa (comissão, carência, saque mínimo, INSS, metas) ficam em `src/data/rules.ts`.
+- Regras do programa (comissão, carência, saque mínimo, metas) ficam em `src/data/rules.ts`.
+- Retenções do RPA de PF ficam em `src/data/taxes.ts`: INSS 11% com teto mensal e IRRF com o redutor
+  da Lei 15.270/2025, somando os saques do mês. ISS fora até o contador definir a regra por
+  município. Sem INSS patronal à parte (Fidz no Simples, Anexo III/V).
 
 ## Convenções
 

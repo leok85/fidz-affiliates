@@ -5,7 +5,6 @@ export const PAYER = { name: 'Kofe Dev Ltda.', cnpj: '47.596.402/0001-64' };
 export const MIN_WITHDRAWAL = 30;
 export const COMMISSION_RATE = 0.2;
 export const GRACE_DAYS = 30;
-export const PF_INSS_RATE = 0.11;
 export const POINTS_PER_REAL = 4;
 export const COMMISSIONED_INSTALLMENTS = 12;
 export const INVOICE_MAX_BYTES = 5 * 1024 * 1024;

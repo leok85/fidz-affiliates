@@ -27,7 +27,7 @@ export function IncomeReportScreen() {
   if (!profile || !years || !report) return <div className={shared.loading}>Carregando…</div>;
 
   const gross = report.months.reduce((sum, m) => sum + m.gross, 0);
-  const withheld = report.months.reduce((sum, m) => sum + m.withheld, 0);
+  const withheld = report.months.reduce((sum, m) => sum + m.inss + m.irrf, 0);
 
   return (
     <>
@@ -99,8 +99,8 @@ export function IncomeReportScreen() {
           <div key={m.month} className={cx(shared.table__row, styles.months__grid, !m.gross && styles.months__row_empty)}>
             <div className={styles.months__name}>{monthName(m.month)}</div>
             <div className={shared.table__right}>{brl(m.gross)}</div>
-            <div className={cx(shared.table__right, styles.months__withheld)}>{brl(m.withheld)}</div>
-            <div className={cx(shared.table__right, styles.months__net)}>{brl(m.gross - m.withheld)}</div>
+            <div className={cx(shared.table__right, styles.months__withheld)}>{brl(m.inss + m.irrf)}</div>
+            <div className={cx(shared.table__right, styles.months__net)}>{brl(m.gross - m.inss - m.irrf)}</div>
           </div>
         ))}
       </div>

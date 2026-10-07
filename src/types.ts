@@ -78,7 +78,8 @@ export interface GoalTier {
 export interface IncomeReportMonth {
   month: number;
   gross: number;
-  withheld: number;
+  inss: number;
+  irrf: number;
 }
 
 export interface IncomeReport {

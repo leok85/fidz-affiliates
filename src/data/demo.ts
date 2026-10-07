@@ -1,4 +1,5 @@
-import type { IncomeReportMonth, LedgerEntry, Referral, RejectedInvoice } from '../types';
+import type { LedgerEntry, Referral, RejectedInvoice } from '../types';
+import { rpaTaxes } from './taxes';
 
 /*
  * Dados de exemplo do painel, os mesmos do projeto de design ("Fidz - Programa de Afiliados").
@@ -10,6 +11,14 @@ import type { IncomeReportMonth, LedgerEntry, Referral, RejectedInvoice } from '
 
 const year = new Date().getFullYear();
 const d = (md: string, y = year) => `${y}-${md}`;
+
+interface DemoRpa {
+  date: string;
+  gross: number;
+  inss: number;
+  irrf: number;
+  paid: boolean;
+}
 
 export const demo = {
   ledger: [
@@ -38,11 +47,11 @@ export const demo = {
     ? { withdrawalId: 'w3', amount: 186.3, reason: 'Valor diferente do saque', resubmitted: false }
     : null) as RejectedInvoice | null,
 
-  /** Saques pagos por mês do ano corrente (só PF tem informe). */
-  incomeMonths: [
-    { month: 6, gross: 214.5, withheld: 214.5 * 0.11 },
-    { month: 8, gross: 198, withheld: 198 * 0.11 }
-  ] as IncomeReportMonth[]
+  /** RPAs dos saques de PF (os pagos entram no informe; todos contam para o mês). */
+  rpas: [
+    { date: d('06-20'), gross: 214.5, ...rpaTaxes(214.5), paid: true },
+    { date: d('08-12'), gross: 198, ...rpaTaxes(198), paid: true }
+  ] as DemoRpa[]
 };
 
 if (demo.rejectedInvoice) {

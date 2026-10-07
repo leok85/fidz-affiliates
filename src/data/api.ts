@@ -1,7 +1,8 @@
 import type { AffiliateAccess, AffiliateProfile, Balance, IncomeReport, LedgerEntry, PersonType, Referral, RejectedInvoice } from '../types';
 import { supabase } from '../lib/supabaseClient';
 import { MONTHS_LONG } from '../utils/format';
-import { INVOICE_MAX_BYTES, MIN_WITHDRAWAL, PF_INSS_RATE } from './rules';
+import { INVOICE_MAX_BYTES, MIN_WITHDRAWAL } from './rules';
+import { rpaTaxes, type MonthToDate, type RpaTaxes } from './taxes';
 import { demo } from './demo';
 
 /*
@@ -70,8 +71,13 @@ export async function fetchIncomeReport(year: number, sinceIso: string): Promise
   const lastMonth = now.getFullYear() === year ? now.getMonth() + 1 : 12;
   const months = [];
   for (let m = firstMonth; m <= lastMonth; m++) {
-    const row = demo.incomeMonths.find((r) => r.month === m);
-    months.push({ month: m, gross: row?.gross ?? 0, withheld: row?.withheld ?? 0 });
+    const paid = demo.rpas.filter((r) => r.paid && r.date.startsWith(`${year}-${String(m).padStart(2, '0')}`));
+    months.push({
+      month: m,
+      gross: paid.reduce((sum, r) => sum + r.gross, 0),
+      inss: paid.reduce((sum, r) => sum + r.inss, 0),
+      irrf: paid.reduce((sum, r) => sum + r.irrf, 0)
+    });
   }
   return wait({ year, months, finalReportDate: `${year + 1}-02-27`, isFinal: year < now.getFullYear() });
 }
@@ -85,6 +91,22 @@ export function validateInvoice(file: File): string | null {
 export interface WithdrawalResult {
   gross: number;
   net: number;
+}
+
+/** PF withdrawals already requested this month, so the INSS cap and IRRF base add up. */
+function monthToDate(): MonthToDate {
+  const month = new Date().toISOString().slice(0, 7);
+  const rows = demo.rpas.filter((r) => r.date.startsWith(month));
+  return {
+    gross: rows.reduce((sum, r) => sum + r.gross, 0),
+    inss: rows.reduce((sum, r) => sum + r.inss, 0),
+    irrf: rows.reduce((sum, r) => sum + r.irrf, 0)
+  };
+}
+
+/** What a PF withdrawal of the whole available balance would withhold right now. */
+export function previewPfTaxes(gross: number): RpaTaxes {
+  return rpaTaxes(gross, monthToDate());
 }
 
 /** O saque é sempre do saldo disponível inteiro. PJ manda a nota fiscal junto. */
@@ -109,7 +131,10 @@ export async function requestWithdrawal({ invoice, personType }: { invoice: File
     amount: -gross
   });
   demo.balance = { ...demo.balance, available: 0, withdrawn: demo.balance.withdrawn + gross };
-  return wait({ gross, net: pj ? gross : gross * (1 - PF_INSS_RATE) });
+  if (pj) return wait({ gross, net: gross });
+  const taxes = previewPfTaxes(gross);
+  demo.rpas.push({ date: new Date().toISOString().slice(0, 10), gross, ...taxes, paid: false });
+  return wait({ gross, net: taxes.net });
 }
 
 export async function resubmitInvoice({ invoice }: { invoice: File }): Promise<void> {
