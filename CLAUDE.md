@@ -23,8 +23,9 @@ Supabase, com a mesma estrutura do fidz-admin e do fidz-client-admin.
 - `VITE_DEMO_INVOICE_REJECTED=true` mostra a nota recusada (afiliado PJ).
 - Login: código de 6 dígitos por e-mail (Supabase OTP, `shouldCreateUser: false`; o usuário do Auth
   é criado pela edge function `affiliate-signup` no cadastro em fidz.com.br/afiliados). Só entra
-  quem tem linha ativa em `affiliates`. O template de e-mail "Magic Link" do Supabase precisa
-  mostrar `{{ .Token }}`.
+  quem tem linha ativa em `affiliates`. O código vem no template "Magic Link" do Supabase
+  (`{{ .Token }}`, fonte em `supabase-email-templates/magic-link.html` no fidz-client-admin), o
+  mesmo e-mail dos donos de loja; vale 1 hora.
 - Regras do programa (comissão, carência, saque mínimo, INSS, metas) ficam em `src/data/rules.ts`.
 
 ## Convenções
