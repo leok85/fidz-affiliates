@@ -1,0 +1,179 @@
+.rejected {
+  background: var(--surface-danger-weak);
+  border: 1px solid #F0C9C3;
+  border-radius: var(--radius-card);
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rejected__icon {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: var(--radius-pill);
+  background: #fff;
+  color: #A33A2B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rejected__text {
+  flex: 1;
+  min-width: 0;
+  color: #7A2A1F;
+}
+
+.rejected__title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.rejected__reason {
+  margin-top: 2px;
+  font-size: var(--text-meta);
+}
+
+.rejected__action {
+  flex: none;
+}
+
+.resubmitted {
+  background: var(--surface-yellow-weak);
+  border-radius: var(--radius-card);
+  padding: 16px 22px;
+  font-size: 13px;
+  color: #5C4000;
+  line-height: 1.55;
+}
+
+.resubmitted__strong {
+  font-weight: 600;
+}
+
+.earnings__summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+}
+
+.available {
+  background: var(--surface-card);
+  border: 2px solid var(--fidz-purple);
+  border-radius: var(--radius-card);
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
+}
+
+.available__value {
+  margin-top: 4px;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: var(--tracking-title);
+  color: var(--fidz-purple);
+}
+
+.earnings__value {
+  margin-top: 4px;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.earnings__note {
+  margin-top: 4px;
+  font-size: var(--text-caption);
+  color: var(--text-soft);
+}
+
+.ledger__grid {
+  grid-template-columns: 110px minmax(0, 1.5fr) minmax(0, 1.3fr) 180px 110px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.ledger__date {
+  color: var(--text-soft);
+}
+
+.ledger__store {
+  font-weight: 500;
+}
+
+.ledger__desc {
+  color: var(--text-body);
+}
+
+.ledger__amount {
+  text-align: right;
+  font-weight: 600;
+}
+
+.ledger__amount_withdrawal {
+  color: #1F7A4A;
+}
+
+@media (max-width: 900px) {
+  .rejected {
+    flex-wrap: wrap;
+    padding: 16px;
+  }
+
+  .rejected__action {
+    width: 100%;
+  }
+
+  .earnings__summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .available {
+    grid-column: 1 / -1;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .earnings__value {
+    font-size: 21px;
+  }
+
+  /* Lançamento em duas linhas: loja e valor; referente a, data e situação. */
+  .ledger__grid {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 12px;
+  }
+
+  .ledger__store {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .ledger__amount {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .ledger__desc {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: var(--text-caption);
+  }
+
+  .ledger__date {
+    grid-column: 2;
+    grid-row: 2;
+    text-align: right;
+    font-size: var(--text-caption);
+  }
+
+  .ledger__status {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+}

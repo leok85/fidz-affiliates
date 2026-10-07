@@ -1,0 +1,54 @@
+@import "./tokens.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-page);
+  font-family: var(--font-sans);
+  color: var(--text-strong);
+}
+
+a {
+  color: var(--fidz-purple);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--fidz-purple-deep);
+}
+
+button {
+  font-family: var(--font-sans);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(37, 37, 37, 0.16);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* "Baixar (PDF)" do informe usa a impressão do navegador: só o conteúdo da tela vai para o papel. */
+@media print {
+  body {
+    background: #fff;
+  }
+
+  [data-print-hide] {
+    display: none !important;
+  }
+}

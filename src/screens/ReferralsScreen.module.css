@@ -1,0 +1,56 @@
+.referrals__grid {
+  grid-template-columns: minmax(0, 1.6fr) 110px 150px minmax(0, 1.4fr) 140px;
+}
+
+.referrals__commission {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.referrals__commissionText {
+  font-size: var(--text-meta);
+  color: var(--text-body);
+}
+
+.referrals__track {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: #EFE7FA;
+  overflow: hidden;
+}
+
+.referrals__fill {
+  height: 100%;
+  background: var(--fidz-purple);
+}
+
+.referrals__earned {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Celular: cada loja vira um bloco, com plano e valor na mesma linha do nome. */
+@media (max-width: 900px) {
+  .referrals__grid {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 12px;
+  }
+
+  .referrals__store {
+    grid-column: 1;
+  }
+
+  .referrals__earned {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .referrals__plan {
+    display: none;
+  }
+
+  .referrals__commission {
+    grid-column: 1 / -1;
+  }
+}

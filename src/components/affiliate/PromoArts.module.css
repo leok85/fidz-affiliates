@@ -1,0 +1,552 @@
+/* Medidas e cores copiadas das artes do projeto de design; são peças de marca, não telas, por isso
+   os valores literais em vez de tokens. */
+
+.reason,
+.bands,
+.phrases,
+.menu,
+.live {
+  width: 232px;
+  height: 290px;
+}
+
+.poll,
+.ways,
+.codeStory {
+  width: 163px;
+  height: 290px;
+}
+
+.reason,
+.bands,
+.phrases,
+.menu,
+.live,
+.poll,
+.ways,
+.codeStory {
+  border-radius: 8px;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-sans);
+  color: #252525;
+}
+
+.logo {
+  width: 40px;
+  display: block;
+}
+
+.logo_sm {
+  width: 34px;
+  display: block;
+}
+
+.logo_xs {
+  width: 34px;
+  display: block;
+}
+
+.logo_lg {
+  width: 48px;
+  display: block;
+}
+
+.logoBox,
+.logoBox_sm {
+  align-self: flex-start;
+  background: #fff;
+  border-radius: 6px;
+  padding: 4px 7px;
+}
+
+.logoBox_sm {
+  padding: 3px 6px;
+}
+
+.footLabel {
+  white-space: nowrap;
+  font-size: 9px;
+  font-weight: 600;
+  color: #6E687A;
+}
+
+.footCode {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.footCode_purple {
+  font-size: 12px;
+  font-weight: 800;
+  color: #6B2EBA;
+}
+
+/* Motivo para voltar */
+.reason {
+  background: #6B2EBA;
+  padding: 18px;
+}
+
+.reason__title {
+  margin-top: 22px;
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+  color: #fff;
+}
+
+.reason__chips {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.reason__chip {
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .7);
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+
+.reason__code {
+  gap: 8px;
+  margin-top: auto;
+  background: #FCBA22;
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reason__codeLabel {
+  white-space: nowrap;
+  font-size: 9px;
+  font-weight: 600;
+  color: #4A3000;
+}
+
+.reason__codeValue {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* Três faixas */
+.bands {
+  background: #fff;
+  border: 1px solid rgba(37, 37, 37, .08);
+}
+
+.bands__top {
+  padding: 14px 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bands__title {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+}
+
+.bands__accent {
+  color: #6B2EBA;
+}
+
+.bands__rows {
+  flex: 1;
+  display: grid;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
+.bands__stamps,
+.bands__points,
+.bands__cashback {
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bands__stamps {
+  background: #6B2EBA;
+}
+
+.bands__points {
+  background: #FCBA22;
+}
+
+.bands__cashback {
+  background: #EFE7FA;
+}
+
+.bands__nameLight,
+.bands__nameDark,
+.bands__namePurple {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.bands__nameLight {
+  color: #fff;
+}
+
+.bands__namePurple,
+.bands__figurePurple {
+  color: #6B2EBA;
+}
+
+.bands__stars {
+  font-size: 11px;
+  color: #FCBA22;
+  letter-spacing: 2px;
+}
+
+.bands__figureDark,
+.bands__figurePurple {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.bands__footer {
+  gap: 8px;
+  padding: 8px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Frases do balcão */
+.phrases {
+  background: #EFE7FA;
+  padding: 16px;
+  gap: 7px;
+}
+
+.phrases__title {
+  margin: 2px 0 4px;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+
+.phrases__bubble,
+.phrases__reply {
+  padding: 6px 9px;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.phrases__bubble {
+  align-self: flex-start;
+  background: #fff;
+  border-radius: 10px 10px 10px 2px;
+}
+
+.phrases__reply {
+  align-self: flex-end;
+  background: #6B2EBA;
+  color: #fff;
+  border-radius: 10px 10px 2px 10px;
+}
+
+.phrases__code {
+  gap: 8px;
+  margin-top: auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 7px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Cardápio */
+.menu {
+  background: #6B2EBA;
+  padding: 9px;
+}
+
+.menu__paper {
+  flex: 1;
+  background: #FFFCF5;
+  border-radius: 5px;
+  padding: 14px 14px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.menu__eyebrow {
+  margin-top: 8px;
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: #6B2EBA;
+}
+
+.menu__title {
+  margin-top: 2px;
+  font-family: 'Young Serif', Georgia, serif;
+  font-size: 19px;
+  line-height: 1.05;
+}
+
+.menu__items {
+  margin-top: 12px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  text-align: left;
+}
+
+.menu__item {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.menu__name {
+  font-family: 'Young Serif', Georgia, serif;
+  font-size: 12px;
+}
+
+.menu__dots {
+  flex: 1;
+  border-bottom: 1px dotted #9B94A6;
+}
+
+.menu__detail {
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #6B2EBA;
+}
+
+.menu__footer {
+  gap: 8px;
+  margin-top: auto;
+  width: 100%;
+  border-top: 1px solid #E4DAF3;
+  padding-top: 7px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu__footLabel {
+  white-space: nowrap;
+  font-size: 8px;
+  font-weight: 600;
+  color: #6E687A;
+}
+
+/* No ar hoje */
+.live {
+  background: #FCBA22;
+  padding: 18px;
+}
+
+.live__title {
+  margin-top: 20px;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+}
+
+.live__text {
+  margin-top: 10px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: #3A2A00;
+}
+
+.live__code {
+  gap: 8px;
+  margin-top: auto;
+  background: #252525;
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.live__codeLabel {
+  white-space: nowrap;
+  font-size: 9px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.live__codeValue {
+  font-size: 13px;
+  font-weight: 800;
+  color: #FCBA22;
+}
+
+/* Enquete (story) */
+.poll {
+  background: #252525;
+  padding: 16px 14px;
+}
+
+.poll__title {
+  margin-top: 42px;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -.02em;
+  color: #fff;
+}
+
+.poll__options {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.poll__yes,
+.poll__no {
+  border-radius: 8px;
+  padding: 7px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.poll__yes {
+  background: #fff;
+}
+
+.poll__no {
+  background: #FCBA22;
+}
+
+.poll__foot {
+  margin-top: auto;
+  font-size: 9px;
+  color: #D9D2E4;
+  line-height: 1.4;
+}
+
+.poll__code {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Três jeitos (story) */
+.ways {
+  background: #6B2EBA;
+  padding: 16px 14px;
+}
+
+.ways__eyebrow {
+  margin-top: 30px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #E4D5F7;
+}
+
+.ways__list {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1.05;
+}
+
+.ways__one {
+  color: #fff;
+}
+
+.ways__two {
+  color: #FCBA22;
+}
+
+.ways__three {
+  color: #EFE7FA;
+}
+
+.ways__code {
+  margin-top: auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 7px 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.ways__codeLabel {
+  font-size: 8px;
+  font-weight: 600;
+  color: #6E687A;
+}
+
+.ways__codeValue {
+  font-size: 13px;
+  font-weight: 800;
+  color: #6B2EBA;
+}
+
+/* Código (story) */
+.codeStory {
+  background: #fff;
+  border: 1px solid rgba(37, 37, 37, .08);
+  padding: 16px 14px;
+  align-items: center;
+  text-align: center;
+}
+
+.codeStory__label {
+  margin-top: 40px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #4A4453;
+}
+
+.codeStory__code {
+  margin-top: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px dashed #6B2EBA;
+  border-radius: 10px;
+  padding: 12px 4px;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: .02em;
+  color: #6B2EBA;
+}
+
+.codeStory__text {
+  margin-top: 12px;
+  font-size: 10px;
+  color: #6E687A;
+  line-height: 1.45;
+}
+
+.codeStory__foot {
+  margin-top: auto;
+  font-size: 9.5px;
+  font-weight: 600;
+}

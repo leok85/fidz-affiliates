@@ -1,0 +1,7 @@
+.reason {
+  background: var(--surface-danger-weak);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: var(--text-meta);
+  color: #7A2A1F;
+}

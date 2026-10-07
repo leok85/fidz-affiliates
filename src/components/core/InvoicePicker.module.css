@@ -1,0 +1,67 @@
+.picker {
+  cursor: pointer;
+  border: 1.5px dashed #C0A3E0;
+  background: #F7F3FC;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.picker_filled {
+  cursor: default;
+  border: 1px solid var(--border-soft);
+  background: #fff;
+}
+
+.picker__icon {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--fidz-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.picker__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.picker__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fidz-purple);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.picker__title_filled {
+  color: var(--text-strong);
+}
+
+.picker__sub {
+  font-size: var(--text-caption);
+  color: var(--text-soft);
+}
+
+.picker__swap {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 4px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fidz-purple);
+}
+
+.picker__error {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--danger);
+}

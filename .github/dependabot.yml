@@ -1,0 +1,16 @@
+# Alertas e PRs de atualização de segurança das dependências (grátis no GitHub). Cada PR do
+# Dependabot passa pelo CI como qualquer outro, e só entra com CI verde.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

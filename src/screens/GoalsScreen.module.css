@@ -1,0 +1,169 @@
+.hero {
+  background: var(--fidz-purple);
+  border-radius: 20px;
+  padding: 26px 28px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  color: #fff;
+}
+
+.hero__points {
+  flex: none;
+}
+
+.hero__label {
+  font-size: var(--text-meta);
+  color: #E4D5F7;
+}
+
+.hero__value {
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: 1.05;
+}
+
+.hero__progress {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hero__legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.hero__next {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.hero__track {
+  height: 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, .2);
+  overflow: hidden;
+}
+
+.hero__fill {
+  height: 100%;
+  background: var(--fidz-yellow);
+  border-radius: var(--radius-pill);
+}
+
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.tier {
+  background: var(--surface-card);
+  border-radius: var(--radius-card);
+  padding: 20px;
+  border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.tier_reached {
+  border-color: var(--fidz-purple);
+}
+
+.tier_next {
+  border-color: var(--fidz-yellow);
+}
+
+.tier_locked {
+  opacity: .6;
+}
+
+.tier__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.tier__name {
+  font-size: var(--text-base);
+  font-weight: 700;
+}
+
+.tier__points {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -.03em;
+}
+
+.tier__unit {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+.tier__prize {
+  border-top: 1px solid var(--border-hairline);
+  padding-top: 12px;
+}
+
+.tier__prizeLabel {
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.tier__prizeValue {
+  margin-top: 3px;
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+}
+
+.tier__prizeValue_tbd {
+  color: var(--text-faint);
+}
+
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+    padding: 20px;
+  }
+
+  .hero__value {
+    font-size: 38px;
+  }
+
+  .hero__legend {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .tiers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .tier {
+    padding: 14px;
+  }
+
+  .tier__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tier__points {
+    font-size: 22px;
+  }
+}
