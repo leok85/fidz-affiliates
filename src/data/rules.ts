@@ -9,11 +9,12 @@ export const POINTS_PER_REAL = 4;
 export const COMMISSIONED_INSTALLMENTS = 12;
 export const INVOICE_MAX_BYTES = 5 * 1024 * 1024;
 
+// Prêmios ainda a definir (decisão de 2026-11-12): null mostra "A anunciar". Os pontos já contam.
 export const GOAL_TIERS: GoalTier[] = [
-  { level: 1, name: 'Bronze', points: 24000, prize: 'Kit Fidz' },
-  { level: 2, name: 'Prata', points: 96000, prize: 'AirPods' },
+  { level: 1, name: 'Bronze', points: 24000, prize: null },
+  { level: 2, name: 'Prata', points: 96000, prize: null },
   { level: 3, name: 'Ouro', points: 240000, prize: null },
-  { level: 4, name: 'Diamante', points: 504000, prize: 'MacBook Neo' }
+  { level: 4, name: 'Diamante', points: 504000, prize: null }
 ];
 
 /** Pontos: cada R$ 1,00 pago pelas lojas indicadas vale 4 pontos, contados só depois da carência. */

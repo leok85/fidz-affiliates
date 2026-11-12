@@ -39,7 +39,7 @@ function PanelPreview() {
           <span>Próxima faixa</span>
           <span>Bronze</span>
         </div>
-        <div className={styles.preview__prize}>Kit Fidz</div>
+        <div className={styles.preview__prize}>Prêmio a anunciar</div>
         <div className={styles.preview__track}>
           <div className={styles.preview__fill} />
         </div>
