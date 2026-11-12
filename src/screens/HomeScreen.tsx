@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { Badge } from '../components/core/Badge';
 import { ReferralLinkBanner } from '../components/affiliate/ReferralLinkBanner';
-import { useBalance, useLedger, usePoints, useProfile, useReferrals } from '../data/queries';
-import { goalProgress } from '../data/goals';
+import { useBalance, useLedger, useProfile, useReferrals } from '../data/queries';
+import { percent, tierProgress } from '../data/tiers';
 import { ledgerBadge } from '../data/status';
 import { brl, firstName, int, monthYear } from '../utils/format';
 import { cx } from '../utils/cx';
@@ -15,14 +15,13 @@ export function HomeScreen() {
   const { data: balance } = useBalance();
   const { data: ledger } = useLedger();
   const { data: referrals } = useReferrals();
-  const points = usePoints();
 
-  if (!profile || !balance || !ledger || !referrals || points === undefined) return <div className={shared.loading}>Carregando…</div>;
+  if (!profile || !balance || !ledger || !referrals) return <div className={shared.loading}>Carregando…</div>;
 
   const active = referrals.filter((r) => r.status === 'active').length;
   const trial = referrals.filter((r) => r.status === 'trial').length;
   const latest = ledger.filter((l) => l.kind === 'commission').slice(0, 4);
-  const goal = goalProgress(points);
+  const tier = tierProgress(active);
 
   return (
     <>
@@ -81,37 +80,39 @@ export function HomeScreen() {
 
         <div className={styles.goal}>
           <div className={styles.goal__header}>
-            <span className={styles.goal__eyebrow}>Metas</span>
-            <button type="button" className={styles.goal__link} onClick={() => navigate('/metas')}>
-              Ver metas →
+            <span className={styles.goal__eyebrow}>Seu nível</span>
+            <button type="button" className={styles.goal__link} onClick={() => navigate('/nivel')}>
+              Ver níveis →
             </button>
           </div>
           <div className={styles.goal__points}>
-            <span className={styles.goal__value}>{int(points)}</span>
-            <span className={styles.goal__unit}>pontos</span>
+            <span className={styles.goal__value}>{percent(tier.current.rate)}</span>
+            <span className={styles.goal__unit}>de comissão · {tier.current.name}</span>
           </div>
-          {goal.next ? (
+          {tier.next ? (
             <>
               <div className={styles.goal__progress}>
                 <div className={styles.goal__track}>
-                  <div className={styles.goal__fill} style={{ width: `${goal.pct}%` }} />
+                  <div className={styles.goal__fill} style={{ width: `${tier.pct}%` }} />
                 </div>
                 <div className={styles.goal__legend}>
-                  <span>Faltam {int(goal.missing)}</span>
-                  <span>{int(goal.next.points)}</span>
+                  <span>{int(active)} pagando</span>
+                  <span>{int(tier.next.minStores)}</span>
                 </div>
               </div>
               <div className={styles.goal__next}>
                 <div>
-                  <div className={styles.goal__nextLabel}>Próxima faixa · {goal.next.name}</div>
-                  <div className={styles.goal__nextPrize}>{goal.next.prize ?? 'A anunciar'}</div>
+                  <div className={styles.goal__nextLabel}>Próximo nível · {tier.next.name}</div>
+                  <div className={styles.goal__nextPrize}>
+                    {percent(tier.next.rate)} com mais {tier.missing === 1 ? '1 loja' : `${int(tier.missing)} lojas`}
+                  </div>
                 </div>
-                <span className={styles.goal__pct}>{goal.pct}%</span>
+                <span className={styles.goal__pct}>{tier.pct}%</span>
               </div>
             </>
           ) : (
             <div className={styles.goal__next}>
-              <div className={styles.goal__nextPrize}>Todas as faixas conquistadas</div>
+              <div className={styles.goal__nextPrize}>Você está no nível mais alto</div>
             </div>
           )}
         </div>

@@ -59,7 +59,7 @@
 
 .tiers {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -128,9 +128,6 @@
   font-weight: 600;
 }
 
-.tier__prizeValue_tbd {
-  color: var(--text-faint);
-}
 
 @media (max-width: 900px) {
   .hero {
