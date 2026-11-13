@@ -19,7 +19,7 @@ export function HomeScreen() {
   if (!profile || !balance || !ledger || !referrals) return <div className={shared.loading}>Carregando…</div>;
 
   const active = referrals.filter((r) => r.status === 'active').length;
-  const trial = referrals.filter((r) => r.status === 'trial').length;
+  const waiting = referrals.filter((r) => r.status === 'trial' || r.status === 'pending').length;
   const latest = ledger.filter((l) => l.kind === 'commission').slice(0, 4);
   const ready = balance.available >= MIN_WITHDRAWAL;
   const pct = Math.min(100, Math.round((balance.available / MIN_WITHDRAWAL) * 100));
@@ -44,7 +44,7 @@ export function HomeScreen() {
         <div className={shared.metric}>
           <div className={shared.metric__label}>Lojas ativas</div>
           <div className={shared.metric__value}>{active}</div>
-          <div className={shared.metric__note}>{trial > 0 ? `${trial} em teste grátis` : 'Nenhuma em teste grátis'}</div>
+          <div className={shared.metric__note}>{waiting > 0 ? `${waiting} aguardando o 1º pagamento` : 'Nenhuma aguardando pagamento'}</div>
         </div>
         <div className={shared.metric}>
           <div className={shared.metric__label}>Ganho total</div>

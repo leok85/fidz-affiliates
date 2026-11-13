@@ -8,6 +8,8 @@ export function ledgerBadge(entry: LedgerEntry): { label: string; tone: Tone } {
       return { label: entry.releasesAt ? `Libera ${shortDate(entry.releasesAt)}` : 'Em carência', tone: 'warning' };
     case 'available':
       return { label: 'Disponível', tone: 'purple' };
+    case 'canceled':
+      return { label: 'Cancelada', tone: 'neutral' };
     case 'withdrawn':
       return { label: 'Sacado', tone: 'neutral' };
     case 'paid':
@@ -23,6 +25,7 @@ export function ledgerBadge(entry: LedgerEntry): { label: string; tone: Tone } {
 
 export function referralBadge(status: Referral['status']): { label: string; tone: Tone } {
   return {
+    pending: { label: 'Aguardando pagamento', tone: 'warning' as Tone },
     active: { label: 'Ativa', tone: 'success' as Tone },
     trial: { label: 'Em teste grátis', tone: 'warning' as Tone },
     late: { label: 'Atrasada', tone: 'warning' as Tone },
@@ -32,16 +35,14 @@ export function referralBadge(status: Referral['status']): { label: string; tone
 }
 
 export function referralCommission(r: Referral) {
-  if (r.plan === 'yearly') return '1/12 da anuidade + 10% do resto · pago';
-  if (r.status === 'trial') return 'Começa no 1º pagamento';
-  if (r.status === 'canceled') return `Cancelou após ${r.paidInstallments} de ${COMMISSIONED_INSTALLMENTS} mensalidades`;
-  return r.paidInstallments === 0
-    ? '1ª mensalidade inteira para você'
-    : `${r.paidInstallments} de ${COMMISSIONED_INSTALLMENTS} mensalidades · 1ª inteira, depois 10%`;
+  if (r.status === 'trial' || r.status === 'pending') return 'A 1ª mensalidade inteira é sua quando ela pagar';
+  const paid = `${r.paidInstallments} de ${COMMISSIONED_INSTALLMENTS} mensalidades`;
+  if (r.status === 'canceled') return `Cancelou após ${paid}`;
+  return r.plan === 'yearly' ? `${paid} · anual` : `${paid} · 1ª inteira, depois 10%`;
 }
 
-/** Monthly plans past their trial show a 12-installment progress bar. */
+/** Progress through the 24 commissioned installments, once the store has paid. */
 export function referralProgress(r: Referral): number | null {
-  if (r.plan !== 'monthly' || r.status === 'trial') return null;
+  if (r.status === 'trial' || r.status === 'pending') return null;
   return Math.round((r.paidInstallments / COMMISSIONED_INSTALLMENTS) * 100);
 }

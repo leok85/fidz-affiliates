@@ -16,17 +16,19 @@ Supabase, com a mesma estrutura do fidz-admin e do fidz-client-admin.
 ## Dados
 
 - Todas as leituras e gravações passam por `src/data/api.ts`. O cadastro vem de `public.affiliates`
-  (migration `20261006214638_affiliates` do fidz-client-admin; o afiliado lê só a própria linha).
-  Indicações, comissões, saques, metas e informe **ainda não têm schema**: usam o estado de exemplo
-  de `src/data/demo.ts` (os dados do projeto de design). Quando existirem, cada função vira
-  query/RPC com o mesmo retorno e as telas não mudam.
+  (o afiliado lê só a própria linha). Indicações, comissões e saldo vêm das RPCs `get_affiliate_referrals`,
+  `get_affiliate_commissions` e `get_affiliate_balance` (migrations do fidz-client-admin; a comissão é
+  gravada por trigger em `invoices` quando a loja indicada paga). Saque, nota recusada e informe do PF
+  ainda usam o estado de exemplo de `src/data/demo.ts`; o saque pelo painel responde "abre em breve".
 - `VITE_DEMO_INVOICE_REJECTED=true` mostra a nota recusada (afiliado PJ).
 - Login: código de 6 dígitos por e-mail (Supabase OTP, `shouldCreateUser: false`; o usuário do Auth
   é criado pela edge function `affiliate-signup` no cadastro em fidz.com.br/afiliados). Só entra
   quem tem linha ativa em `affiliates`. O código vem no template "Magic Link" do Supabase
   (`{{ .Token }}`, fonte em `supabase-email-templates/magic-link.html` no fidz-client-admin), o
   mesmo e-mail dos donos de loja; vale 1 hora.
-- Regras do programa (comissão, carência, saque mínimo, metas) ficam em `src/data/rules.ts`.
+- Regras do programa ficam em `src/data/rules.ts` (iguais a `affiliate_program_rules()` no banco): 1ª
+  mensalidade inteira, depois 10% até 24 mensalidades (anual: 1/12 inteiro + 10% do resto), carência de
+  30 dias, saque mínimo de R$ 100. Só PJ por enquanto (PF em breve).
 - Retenções do RPA de PF ficam em `src/data/taxes.ts`: INSS 11% com teto mensal e IRRF com o redutor
   da Lei 15.270/2025, somando os saques do mês. ISS fora até o contador definir a regra por
   município. Sem INSS patronal à parte (Fidz no Simples, Anexo III/V).

@@ -18,7 +18,8 @@ export interface AffiliateProfile {
 }
 
 /** 'late': the store stopped paying (past due, at risk or blocked for non-payment) but didn't cancel. */
-export type ReferralStatus = 'active' | 'trial' | 'late' | 'completed' | 'canceled';
+/** 'pending': signed up and has not made the first payment yet. */
+export type ReferralStatus = 'pending' | 'active' | 'trial' | 'late' | 'completed' | 'canceled';
 export type ReferralPlan = 'monthly' | 'yearly';
 
 export interface Referral {
@@ -28,13 +29,14 @@ export interface Referral {
   via: 'link' | 'code';
   plan: ReferralPlan;
   status: ReferralStatus;
-  /** Monthly plans: how many of the 12 commissioned installments were paid. */
+  /** How many of the 24 commissioned installments were paid (an annual payment counts as 12). */
   paidInstallments: number;
   earned: number;
 }
 
 export type LedgerStatus =
   | 'grace'
+  | 'canceled'
   | 'available'
   | 'withdrawn'
   | 'paid'

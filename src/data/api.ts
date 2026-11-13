@@ -1,14 +1,14 @@
 import type { AffiliateAccess, AffiliateProfile, Balance, IncomeReport, LedgerEntry, PersonType, Referral, RejectedInvoice } from '../types';
 import { supabase } from '../lib/supabaseClient';
 import { brl, MONTHS_LONG } from '../utils/format';
-import { INVOICE_MAX_BYTES, MIN_WITHDRAWAL } from './rules';
+import { COMMISSIONED_INSTALLMENTS, INVOICE_MAX_BYTES, MIN_WITHDRAWAL } from './rules';
 import { rpaTaxes, type MonthToDate, type RpaTaxes } from './taxes';
 import { demo } from './demo';
 
 /*
- * Todas as leituras e gravações do painel passam por aqui, como no fidz-admin. O cadastro vem de
- * public.affiliates; o resto ainda usa o estado de exemplo de ./demo, até o schema de indicações,
- * comissões e saques existir. Cada função dessas vira uma query ou RPC com o mesmo retorno.
+ * Todas as leituras e gravações do painel passam por aqui, como no fidz-admin. Cadastro, indicações,
+ * comissões e saldo vêm do Supabase (public.affiliates e as RPCs get_affiliate_*, do fidz-client-admin).
+ * Saque, nota recusada e informe do PF ainda usam o estado de exemplo de ./demo, até o saque existir.
  */
 
 const wait = <T,>(value: T) => new Promise<T>((resolve) => setTimeout(() => resolve(structuredClone(value)), 200));
@@ -45,15 +45,77 @@ export async function fetchAffiliateAccess(): Promise<AffiliateAccess> {
 }
 
 export async function fetchBalance(): Promise<Balance> {
-  return wait(demo.balance);
+  const { data, error } = await supabase.rpc('get_affiliate_balance').single();
+  if (error) throw error;
+  const row = data as { available: number; grace: number; withdrawn: number };
+  return { available: Number(row.available), grace: Number(row.grace), withdrawn: Number(row.withdrawn) };
+}
+
+interface CommissionRow {
+  id: number;
+  paid_at: string;
+  store: string;
+  kind: 'first' | 'recurring' | 'reversal';
+  installments: number;
+  first_installment: number;
+  amount: number;
+  state: 'grace' | 'available' | 'canceled';
+  releases_at: string;
+}
+
+/** Como cada comissão aparece no extrato (termos, seção 4: 1ª inteira, depois 10% até a 24ª). */
+export function commissionDescription(c: Pick<CommissionRow, 'kind' | 'installments' | 'first_installment'>) {
+  if (c.kind === 'reversal') return 'Estorno: o pagamento foi reembolsado';
+  if (c.installments > 1) {
+    const last = c.first_installment + c.installments - 1;
+    return c.kind === 'first'
+      ? `Anuidade · 1ª mensalidade inteira + 10% até a ${last}ª`
+      : `Anuidade · 10% das mensalidades ${c.first_installment} a ${last}`;
+  }
+  return c.kind === 'first'
+    ? '1ª mensalidade inteira'
+    : `Mensalidade ${c.first_installment} de ${COMMISSIONED_INSTALLMENTS} · 10%`;
 }
 
 export async function fetchLedger(): Promise<LedgerEntry[]> {
-  return wait(demo.ledger);
+  const { data, error } = await supabase.rpc('get_affiliate_commissions');
+  if (error) throw error;
+  return ((data ?? []) as CommissionRow[]).map((c) => ({
+    id: `c${c.id}`,
+    date: c.paid_at.slice(0, 10),
+    kind: 'commission',
+    store: c.store,
+    description: commissionDescription(c),
+    status: c.state,
+    releasesAt: c.state === 'grace' ? c.releases_at.slice(0, 10) : null,
+    amount: Number(c.amount)
+  }));
+}
+
+interface ReferralRow {
+  company_id: number;
+  store: string;
+  signed_up_at: string;
+  via: 'link' | 'code';
+  plan: 'monthly' | 'yearly' | null;
+  status: Referral['status'];
+  paid_installments: number;
+  earned: number;
 }
 
 export async function fetchReferrals(): Promise<Referral[]> {
-  return wait(demo.referrals);
+  const { data, error } = await supabase.rpc('get_affiliate_referrals');
+  if (error) throw error;
+  return ((data ?? []) as ReferralRow[]).map((r) => ({
+    id: String(r.company_id),
+    store: r.store,
+    signedUpAt: r.signed_up_at.slice(0, 10),
+    via: r.via,
+    plan: r.plan ?? 'monthly',
+    status: r.status,
+    paidInstallments: r.paid_installments,
+    earned: Number(r.earned)
+  }));
 }
 
 export async function fetchRejectedInvoice(): Promise<RejectedInvoice | null> {
@@ -109,32 +171,19 @@ export function previewPfTaxes(gross: number): RpaTaxes {
   return rpaTaxes(gross, monthToDate());
 }
 
-/** O saque é sempre do saldo disponível inteiro. PJ manda a nota fiscal junto. */
+/**
+ * O saque é sempre do saldo disponível inteiro. PJ manda a nota fiscal junto. Ainda sem tabela de saques
+ * no schema: confere tudo e avisa que o saque pelo painel abre em breve, sem fingir que sacou.
+ */
 export async function requestWithdrawal({ invoice, personType }: { invoice: File | null; personType: PersonType }): Promise<WithdrawalResult> {
-  const pj = personType === 'PJ';
-  const gross = demo.balance.available;
-  if (gross < MIN_WITHDRAWAL) throw new Error(`Saque a partir de ${brl(MIN_WITHDRAWAL)}.`);
-  if (pj && !invoice) throw new Error('Anexe a nota fiscal.');
+  const { available } = await fetchBalance();
+  if (available < MIN_WITHDRAWAL) throw new Error(`Saque a partir de ${brl(MIN_WITHDRAWAL)}.`);
+  if (personType === 'PJ' && !invoice) throw new Error('Anexe a nota fiscal.');
   if (invoice) {
     const error = validateInvoice(invoice);
     if (error) throw new Error(error);
   }
-  demo.ledger = demo.ledger.map((l) => (l.status === 'available' ? { ...l, status: 'withdrawn' } : l));
-  demo.ledger.unshift({
-    id: `w${Date.now()}`,
-    date: new Date().toISOString().slice(0, 10),
-    kind: 'withdrawal',
-    store: null,
-    description: '',
-    status: pj ? 'invoice_review' : 'processing',
-    releasesAt: null,
-    amount: -gross
-  });
-  demo.balance = { ...demo.balance, available: 0, withdrawn: demo.balance.withdrawn + gross };
-  if (pj) return wait({ gross, net: gross });
-  const taxes = previewPfTaxes(gross);
-  demo.rpas.push({ date: new Date().toISOString().slice(0, 10), gross, ...taxes, paid: false });
-  return wait({ gross, net: taxes.net });
+  throw new Error('O saque pelo painel abre em breve. Seu saldo fica guardado e não expira.');
 }
 
 export async function resubmitInvoice({ invoice }: { invoice: File }): Promise<void> {
@@ -143,7 +192,6 @@ export async function resubmitInvoice({ invoice }: { invoice: File }): Promise<v
   const rejected = demo.rejectedInvoice;
   if (!rejected) return;
   demo.rejectedInvoice = { ...rejected, resubmitted: true };
-  demo.ledger = demo.ledger.map((l) => (l.id === rejected.withdrawalId ? { ...l, status: 'invoice_review' } : l));
   return wait(undefined);
 }
 
