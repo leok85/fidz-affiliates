@@ -1,10 +1,8 @@
-import type { RejectedInvoice } from '../types';
 import { rpaTaxes } from './taxes';
 
 /*
- * O que ainda é exemplo no painel: a nota recusada de um saque (só PJ, com
- * VITE_DEMO_INVOICE_REJECTED=true) e os RPAs do informe de rendimentos do PF. Cadastro, indicações,
- * comissões e saldo já vêm do Supabase; isto sai quando o saque existir.
+ * O que ainda é exemplo no painel: os RPAs do informe de rendimentos do PF, que só abre quando o
+ * afiliado pessoa física existir. Todo o resto vem do Supabase.
  */
 
 const year = new Date().getFullYear();
@@ -19,9 +17,6 @@ interface DemoRpa {
 }
 
 export const demo = {
-  rejectedInvoice: (import.meta.env.VITE_DEMO_INVOICE_REJECTED === 'true'
-    ? { withdrawalId: 'w3', amount: 186.3, reason: 'Valor diferente do saque', resubmitted: false }
-    : null) as RejectedInvoice | null,
 
   /** RPAs dos saques de PF (os pagos entram no informe; todos contam para o mês). */
   rpas: [

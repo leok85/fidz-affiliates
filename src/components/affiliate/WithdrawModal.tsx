@@ -30,7 +30,7 @@ export function WithdrawModal({ profile, available, onClose }: { profile: Affili
         <div className={shared.modal__title}>Saque solicitado</div>
         <div className={styles.done__text}>
           {pj
-            ? `Recebemos a nota de ${brl(gross)}. Depois da aprovação, o Pix cai em até 2 dias úteis. Você recebe um aviso no e-mail.`
+            ? `Recebemos a nota de ${brl(gross)}. Depois da aprovação, o Pix cai em até 2 dias úteis. Acompanhe a situação aqui em Ganhos e saque.`
             : `${brl(net)} (líquido) vai cair na sua chave Pix em até 2 dias úteis. Você recebe um aviso no e-mail quando for pago.`}
         </div>
         <Button onClick={onClose}>Ok</Button>

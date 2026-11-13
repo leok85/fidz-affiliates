@@ -5,7 +5,6 @@ import { LoginScreen } from './screens/LoginScreen';
 import { HomeScreen } from './screens/HomeScreen';
 import { ReferralsScreen } from './screens/ReferralsScreen';
 import { EarningsScreen } from './screens/EarningsScreen';
-import { PromoScreen } from './screens/PromoScreen';
 import { IncomeReportScreen } from './screens/IncomeReportScreen';
 
 function RequireAuth() {
@@ -32,7 +31,7 @@ export function App() {
           <Route path="/indicacoes" element={<ReferralsScreen />} />
           <Route path="/ganhos" element={<EarningsScreen />} />
           <Route path="/metas" element={<Navigate to="/" replace />} />
-          <Route path="/divulgar" element={<PromoScreen />} />
+          <Route path="/divulgar" element={<Navigate to="/" replace />} />
           <Route path="/informe" element={<IncomeReportScreen />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

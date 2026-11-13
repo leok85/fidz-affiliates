@@ -47,8 +47,28 @@ export async function fetchAffiliateAccess(): Promise<AffiliateAccess> {
 export async function fetchBalance(): Promise<Balance> {
   const { data, error } = await supabase.rpc('get_affiliate_balance').single();
   if (error) throw error;
-  const row = data as { available: number; grace: number; withdrawn: number };
-  return { available: Number(row.available), grace: Number(row.grace), withdrawn: Number(row.withdrawn) };
+  const row = data as { available: number; grace: number; withdrawn: number; in_withdrawal: number };
+  return {
+    available: Number(row.available),
+    grace: Number(row.grace),
+    withdrawn: Number(row.withdrawn),
+    inWithdrawal: Number(row.in_withdrawal)
+  };
+}
+
+interface WithdrawalRow {
+  id: number;
+  amount: number;
+  status: 'invoice_review' | 'invoice_rejected' | 'processing' | 'paid';
+  rejection_reason: string | null;
+  requested_at: string;
+  paid_at: string | null;
+}
+
+async function fetchWithdrawals(): Promise<WithdrawalRow[]> {
+  const { data, error } = await supabase.rpc('get_affiliate_withdrawals');
+  if (error) throw error;
+  return (data ?? []) as WithdrawalRow[];
 }
 
 interface CommissionRow {
@@ -78,9 +98,9 @@ export function commissionDescription(c: Pick<CommissionRow, 'kind' | 'installme
 }
 
 export async function fetchLedger(): Promise<LedgerEntry[]> {
-  const { data, error } = await supabase.rpc('get_affiliate_commissions');
+  const [{ data, error }, withdrawals] = await Promise.all([supabase.rpc('get_affiliate_commissions'), fetchWithdrawals()]);
   if (error) throw error;
-  return ((data ?? []) as CommissionRow[]).map((c) => ({
+  const commissions: LedgerEntry[] = ((data ?? []) as CommissionRow[]).map((c) => ({
     id: `c${c.id}`,
     date: c.paid_at.slice(0, 10),
     kind: 'commission',
@@ -90,6 +110,17 @@ export async function fetchLedger(): Promise<LedgerEntry[]> {
     releasesAt: c.state === 'grace' ? c.releases_at.slice(0, 10) : null,
     amount: Number(c.amount)
   }));
+  const payouts: LedgerEntry[] = withdrawals.map((w) => ({
+    id: `w${w.id}`,
+    date: (w.paid_at ?? w.requested_at).slice(0, 10),
+    kind: 'withdrawal',
+    store: null,
+    description: '',
+    status: w.status,
+    releasesAt: null,
+    amount: -Number(w.amount)
+  }));
+  return [...payouts, ...commissions].sort((a, b) => b.date.localeCompare(a.date));
 }
 
 interface ReferralRow {
@@ -118,8 +149,12 @@ export async function fetchReferrals(): Promise<Referral[]> {
   }));
 }
 
+/** O saque aberto com a nota recusada, se houver (só um saque aberto por vez). */
 export async function fetchRejectedInvoice(): Promise<RejectedInvoice | null> {
-  return wait(demo.rejectedInvoice);
+  const rejected = (await fetchWithdrawals()).find((w) => w.status === 'invoice_rejected');
+  return rejected
+    ? { withdrawalId: String(rejected.id), amount: Number(rejected.amount), reason: rejected.rejection_reason ?? '', resubmitted: false }
+    : null;
 }
 
 export async function fetchIncomeYears(): Promise<number[]> {
@@ -171,28 +206,50 @@ export function previewPfTaxes(gross: number): RpaTaxes {
   return rpaTaxes(gross, monthToDate());
 }
 
-/**
- * O saque é sempre do saldo disponível inteiro. PJ manda a nota fiscal junto. Ainda sem tabela de saques
- * no schema: confere tudo e avisa que o saque pelo painel abre em breve, sem fingir que sacou.
- */
-export async function requestWithdrawal({ invoice, personType }: { invoice: File | null; personType: PersonType }): Promise<WithdrawalResult> {
-  const { available } = await fetchBalance();
-  if (available < MIN_WITHDRAWAL) throw new Error(`Saque a partir de ${brl(MIN_WITHDRAWAL)}.`);
-  if (personType === 'PJ' && !invoice) throw new Error('Anexe a nota fiscal.');
-  if (invoice) {
-    const error = validateInvoice(invoice);
-    if (error) throw new Error(error);
-  }
-  throw new Error('O saque pelo painel abre em breve. Seu saldo fica guardado e não expira.');
+const WITHDRAWAL_ERRORS: Record<string, string> = {
+  not_affiliate: 'Seu cadastro de afiliado não está ativo.',
+  pf_unavailable: 'O saque de pessoa física ainda não está disponível.',
+  withdrawal_open: 'Você já tem um saque em andamento. O próximo fica liberado depois que ele for pago.',
+  below_minimum: `Saque a partir de ${brl(MIN_WITHDRAWAL)}.`,
+  invoice_missing: 'Não conseguimos receber a nota. Envie o arquivo de novo.',
+  withdrawal_not_rejected: 'Esse saque não está com a nota recusada.'
+};
+
+function withdrawalError(error: { message: string }) {
+  const known = Object.keys(WITHDRAWAL_ERRORS).find((code) => error.message.includes(code));
+  return new Error(known ? WITHDRAWAL_ERRORS[known] : 'Não foi possível concluir agora. Tente de novo em alguns minutos.');
 }
 
-export async function resubmitInvoice({ invoice }: { invoice: File }): Promise<void> {
-  const error = validateInvoice(invoice);
+/** Envia a nota para a pasta do afiliado no bucket privado affiliate-invoices e devolve o caminho. */
+async function uploadInvoice(file: File): Promise<string> {
+  const error = validateInvoice(file);
   if (error) throw new Error(error);
-  const rejected = demo.rejectedInvoice;
-  if (!rejected) return;
-  demo.rejectedInvoice = { ...rejected, resubmitted: true };
-  return wait(undefined);
+  const { data: affiliateId, error: idError } = await supabase.rpc('current_affiliate_id');
+  if (idError || !affiliateId) throw withdrawalError(idError ?? { message: 'not_affiliate' });
+  const ext = file.name.toLowerCase().endsWith('.xml') ? 'xml' : 'pdf';
+  const path = `${affiliateId}/${Date.now()}-${crypto.randomUUID()}.${ext}`;
+  const { error: uploadError } = await supabase.storage
+    .from('affiliate-invoices')
+    .upload(path, file, { contentType: ext === 'xml' ? 'application/xml' : 'application/pdf' });
+  if (uploadError) throw withdrawalError({ message: 'invoice_missing' });
+  return path;
+}
+
+/** O saque é sempre do saldo disponível inteiro, com a nota fiscal no valor do saque (só PJ por enquanto). */
+export async function requestWithdrawal({ invoice, personType }: { invoice: File | null; personType: PersonType }): Promise<WithdrawalResult> {
+  if (personType !== 'PJ') throw withdrawalError({ message: 'pf_unavailable' });
+  if (!invoice) throw new Error('Anexe a nota fiscal.');
+  const path = await uploadInvoice(invoice);
+  const { data, error } = await supabase.rpc('request_affiliate_withdrawal', { p_invoice_path: path });
+  if (error) throw withdrawalError(error);
+  const gross = Number(data);
+  return { gross, net: gross };
+}
+
+export async function resubmitInvoice({ withdrawalId, invoice }: { withdrawalId: string; invoice: File }): Promise<void> {
+  const path = await uploadInvoice(invoice);
+  const { error } = await supabase.rpc('resubmit_affiliate_invoice', { p_withdrawal_id: Number(withdrawalId), p_invoice_path: path });
+  if (error) throw withdrawalError(error);
 }
 
 export function monthName(month: number) {

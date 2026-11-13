@@ -4,7 +4,7 @@ export function referralUrl(profile: AffiliateProfile) {
   return `https://${profile.link}`;
 }
 
-export function captionsFor(profile: AffiliateProfile): Caption[] {
+function captionsFor(profile: AffiliateProfile): Caption[] {
   const { code, link } = profile;
   return [
     {

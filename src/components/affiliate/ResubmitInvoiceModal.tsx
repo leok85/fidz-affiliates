@@ -15,7 +15,7 @@ export function ResubmitInvoiceModal({ rejected, onClose }: { rejected: Rejected
   const [invoice, setInvoice] = useState<File | null>(null);
 
   const resubmit = useMutation({
-    mutationFn: (file: File) => resubmitInvoice({ invoice: file }),
+    mutationFn: (file: File) => resubmitInvoice({ withdrawalId: rejected.withdrawalId, invoice: file }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['rejected-invoice'] });
       queryClient.invalidateQueries({ queryKey: ['ledger'] });

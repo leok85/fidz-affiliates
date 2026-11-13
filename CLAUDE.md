@@ -18,9 +18,10 @@ Supabase, com a mesma estrutura do fidz-admin e do fidz-client-admin.
 - Todas as leituras e gravações passam por `src/data/api.ts`. O cadastro vem de `public.affiliates`
   (o afiliado lê só a própria linha). Indicações, comissões e saldo vêm das RPCs `get_affiliate_referrals`,
   `get_affiliate_commissions` e `get_affiliate_balance` (migrations do fidz-client-admin; a comissão é
-  gravada por trigger em `invoices` quando a loja indicada paga). Saque, nota recusada e informe do PF
-  ainda usam o estado de exemplo de `src/data/demo.ts`; o saque pelo painel responde "abre em breve".
-- `VITE_DEMO_INVOICE_REJECTED=true` mostra a nota recusada (afiliado PJ).
+  gravada por trigger em `invoices` quando a loja indicada paga). Saque: o afiliado PJ envia a nota ao
+  bucket privado `affiliate-invoices` (`<id do afiliado>/…`) e chama `request_affiliate_withdrawal`; nota
+  recusada volta por `resubmit_affiliate_invoice`. O Admin aprova e paga no fidz-admin. Só o informe do
+  PF ainda usa o estado de exemplo de `src/data/demo.ts`.
 - Login: código de 6 dígitos por e-mail (Supabase OTP, `shouldCreateUser: false`; o usuário do Auth
   é criado pela edge function `affiliate-signup` no cadastro em fidz.com.br/afiliados). Só entra
   quem tem linha ativa em `affiliates`. O código vem no template "Magic Link" do Supabase

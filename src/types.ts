@@ -60,7 +60,10 @@ export interface LedgerEntry {
 export interface Balance {
   available: number;
   grace: number;
+  /** Already paid by Pix. */
   withdrawn: number;
+  /** In a withdrawal that is not paid yet (invoice in review, rejected or Pix pending). */
+  inWithdrawal: number;
 }
 
 export interface RejectedInvoice {

@@ -11,7 +11,6 @@ const NAV_ITEMS = [
   { path: '/', name: 'Início' },
   { path: '/indicacoes', name: 'Indicações' },
   { path: '/ganhos', name: 'Ganhos e saque' },
-  { path: '/divulgar', name: 'Divulgar' },
   // Só pessoa física recebe informe de rendimentos (RPA); PJ emite a própria nota.
   { path: '/informe', name: 'Informe de rendimentos', pfOnly: true }
 ];
