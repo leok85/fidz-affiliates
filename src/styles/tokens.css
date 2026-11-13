@@ -1,0 +1,136 @@
+:root {
+  /* Brand */
+  --fidz-purple: #6B2EBA;
+  --fidz-purple-deep: #4E1E8C;
+  --fidz-purple-ink: #2A1147;
+  --fidz-purple-soft: #976ACD;
+  --fidz-purple-light: #C8AAE5;
+  --fidz-yellow: #FCBA22;
+  --fidz-orange: #FCA614;
+  --fidz-charcoal: #252525;
+
+  /* Surfaces */
+  --surface-page: #F4F1F9;
+  --surface-page-light: #FBF9FE;
+  --surface-card: #FFFFFF;
+  --surface-sunken: #F2EFF7;
+  --surface-purple-weak: #EDE6F7;
+  --surface-yellow-weak: #FDF1D5;
+  --surface-danger-weak: #FBEDEC;
+
+  /* Text */
+  --text-strong: #252525;
+  --text-body: #4A4453;
+  --text-muted: #6B6572;
+  --text-soft: #6E687A;
+  --text-faint: #9B94A6;
+  --text-on-yellow: #3A2800;
+  --text-on-yellow-soft: #7A5300;
+  --text-yellow-ink: #B27A00;
+  --text-on-purple: #FFFFFF;
+  --text-on-dark-muted: #D6CCE6;
+
+  /* Semantic */
+  --danger: #B0413E;
+  --success: #2E7D53;
+  --warning: #B27A00;
+
+  /* Tones (badges, pills, status text) */
+  --tone-neutral-bg: #F2EFF7;
+  --tone-neutral-text: #4A4453;
+  --tone-success-bg: #E4F1E9;
+  --tone-success-text: #2E7D4F;
+  --tone-warning-bg: #FDF1D5;
+  --tone-warning-text: #8A5A00;
+  --tone-danger-bg: #FBEDEC;
+  --tone-danger-text: #B0413E;
+  --tone-purple-bg: #EDE6F7;
+  --tone-purple-text: #6B2EBA;
+  --tone-info-bg: #E6EFF7;
+  --tone-info-text: #1F6FB2;
+
+  /* Borders */
+  --border-hairline: rgba(37,37,37,.08);
+  --border-soft: rgba(37,37,37,.10);
+  --border-field: rgba(37,37,37,.14);
+  --border-danger: #E0A9A2;
+  --border-dashed: #C8AAE5;
+  --border-on-dark: rgba(255,255,255,.12);
+
+  /* Typography */
+  --font-sans: Poppins, system-ui, sans-serif;
+  --font-mono: ui-monospace, Menlo, monospace;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --text-hero: 52px;
+  --text-display: 34px;
+  --text-metric: 28px;
+  --text-title: 22px;
+  --text-subtitle: 20px;
+  --text-lead: 17px;
+  --text-card-title: 16.5px;
+  --text-base: 15px;
+  --text-body-sm: 13.5px;
+  --text-meta: 12.5px;
+  --text-caption: 11.5px;
+  --text-label: 11px;
+
+  --leading-tight: 1.15;
+  --leading-title: 1.25;
+  --leading-body: 1.6;
+  --leading-dense: 1.5;
+
+  --tracking-hero: -.03em;
+  --tracking-title: -.02em;
+  --tracking-tight: -.01em;
+  --tracking-label: .1em;
+  --tracking-eyebrow: .12em;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 6px;
+  --space-3: 8px;
+  --space-4: 10px;
+  --space-5: 12px;
+  --space-6: 14px;
+  --space-7: 16px;
+  --space-8: 18px;
+  --space-9: 22px;
+  --space-10: 26px;
+  --space-11: 30px;
+  --space-12: 36px;
+  --space-14: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  --gutter-app: 22px;
+  --gutter-panel: 28px;
+  --gutter-site: 28px;
+  --width-site: 1120px;
+  --width-sidebar: 236px;
+
+  /* Shape */
+  --radius-field: 10px;
+  --radius-input: 12px;
+  --radius-tile: 14px;
+  --radius-card: 16px;
+  --radius-card-lg: 18px;
+  --radius-modal: 24px;
+  --radius-hero: 26px;
+  --radius-pill: 999px;
+
+  --shadow-raise: 0 4px 14px rgba(37,37,37,.10);
+  --shadow-card: 0 6px 20px rgba(107,46,186,.12);
+  --shadow-menu: 0 14px 34px rgba(37,37,37,.16);
+  --shadow-yellow: 0 8px 22px rgba(252,186,34,.35);
+  --shadow-modal: 0 24px 60px rgba(24,12,40,.34);
+  --shadow-hero: 0 24px 60px -30px rgba(107,46,186,.40);
+  --shadow-device: 0 20px 54px rgba(37,37,37,.22);
+
+  --scrim: rgba(24,12,40,.5);
+  --border-focus: 2px solid #6B2EBA;
+}

@@ -1,0 +1,126 @@
+.years {
+  display: flex;
+  gap: 4px;
+  background: var(--surface-card);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.years__item {
+  cursor: pointer;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-body);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.years__item_active {
+  background: var(--fidz-purple);
+  color: #fff;
+}
+
+.report__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 14px;
+}
+
+.parties {
+  background: var(--surface-card);
+  border-radius: var(--radius-card);
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px 24px;
+  font-size: 13px;
+}
+
+.parties__label {
+  font-size: var(--text-caption);
+  color: var(--text-soft);
+}
+
+.parties__value {
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.total {
+  background: var(--fidz-purple);
+  border-radius: var(--radius-card);
+  padding: 22px 24px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.total__label {
+  font-size: 12px;
+  color: #E4D5F7;
+}
+
+.total__value {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -.03em;
+}
+
+.total__withheld {
+  font-size: var(--text-meta);
+}
+
+.total__action {
+  margin-top: auto;
+  padding-top: 8px;
+  align-self: flex-start;
+}
+
+.months__grid {
+  grid-template-columns: minmax(0, 1fr) 140px 140px 140px;
+  padding-top: 11px;
+  padding-bottom: 11px;
+}
+
+.months__row_empty {
+  color: var(--text-faint);
+}
+
+.months__name {
+  font-weight: 500;
+}
+
+.months__net {
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .report__top {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .parties {
+    padding: 16px;
+  }
+
+  .total {
+    padding: 20px;
+  }
+
+  .total__value {
+    font-size: 28px;
+  }
+
+  .months__grid {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    font-size: 12px;
+  }
+
+  /* No celular fica mês, bruto e líquido; os impostos retidos estão no total. */
+  .months__withheld {
+    display: none;
+  }
+}

@@ -1,0 +1,80 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.shell__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.shell__content {
+  flex: 1;
+  min-width: 0;
+  padding: 34px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 1280px;
+}
+
+.shell__topBar,
+.shell__backdrop {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .shell__topBar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    height: 60px;
+    padding: 0 16px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--fidz-charcoal);
+  }
+
+  .shell__menu {
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .shell__topLogo {
+    width: 66px;
+    height: auto;
+    display: block;
+  }
+
+  .shell__topTag {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--fidz-yellow);
+  }
+
+  .shell__backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    background: rgba(24, 12, 40, 0.38);
+  }
+
+  .shell__content {
+    padding: 22px 16px 32px;
+    gap: 18px;
+  }
+}

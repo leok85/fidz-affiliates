@@ -1,0 +1,87 @@
+/* Botões do painel do afiliado: retângulo de canto 12px, como no design (não pílula). */
+.button {
+  font-family: var(--font-sans);
+  border-radius: var(--radius-input);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  cursor: pointer;
+  font-weight: 600;
+  border: 1.5px solid transparent;
+  transition: background .15s ease, opacity .15s ease;
+}
+
+.button_full {
+  width: 100%;
+}
+
+.button_sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 12px;
+  border-radius: 9px;
+}
+
+.button_md {
+  height: 46px;
+  padding: 0 20px;
+  font-size: 14px;
+}
+
+.button_lg {
+  height: 52px;
+  padding: 0 22px;
+  font-size: var(--text-base);
+}
+
+.button_primary {
+  background: var(--fidz-purple);
+  color: #fff;
+}
+
+.button_disabled {
+  cursor: default;
+  opacity: .45;
+}
+
+/* Disabled primary is the light lilac from the design (#C0A3E0), not a faded purple. */
+.button_primaryDisabled {
+  cursor: default;
+  background: #C0A3E0;
+}
+
+.button_outline {
+  background: #fff;
+  color: var(--fidz-purple);
+  border-color: var(--fidz-purple);
+}
+
+.button_neutral {
+  background: #fff;
+  color: var(--text-strong);
+  border-color: var(--border-field);
+}
+
+.button_reward {
+  background: var(--fidz-yellow);
+  color: var(--fidz-charcoal);
+  font-weight: 700;
+}
+
+.button_danger {
+  background: #A33A2B;
+  color: #fff;
+}
+
+.button_onPurple {
+  background: #fff;
+  color: var(--fidz-purple);
+}
+
+.button_ghostOnPurple {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, .6);
+}
