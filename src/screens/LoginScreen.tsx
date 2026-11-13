@@ -36,14 +36,14 @@ function PanelPreview() {
       </div>
       <div className={styles.preview__goal}>
         <div className={styles.preview__goalHead}>
-          <span>Próximo nível</span>
-          <span>Prata</span>
+          <span>Como você ganha</span>
+          <span>2 anos</span>
         </div>
-        <div className={styles.preview__prize}>15% de comissão</div>
+        <div className={styles.preview__prize}>1ª mensalidade inteira + 10%</div>
         <div className={styles.preview__track}>
           <div className={styles.preview__fill} />
         </div>
-        <div className={styles.preview__goalNote}>3 de 5 lojas pagando</div>
+        <div className={styles.preview__goalNote}>R$ 89,10 de R$ 100 para o próximo saque</div>
       </div>
     </div>
   );
@@ -101,7 +101,7 @@ export function LoginScreen() {
         <h1 className={styles.login__headline}>
           Suas indicações viram <span className={styles.login__accent}>comissão</span>
         </h1>
-        <div className={styles.login__lead}>Comissões, saques e nível das lojas que você indicou.</div>
+        <div className={styles.login__lead}>Comissões e saques das lojas que você indicou.</div>
         <PanelPreview />
         <div className={styles.login__support}>
           Dúvida no acesso? Escreva para{' '}

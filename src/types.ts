@@ -68,14 +68,6 @@ export interface RejectedInvoice {
   resubmitted: boolean;
 }
 
-export interface CommissionTier {
-  level: number;
-  name: string;
-  /** Lojas indicadas pagando no momento, a partir das quais o nível vale. */
-  minStores: number;
-  rate: number;
-}
-
 export interface IncomeReportMonth {
   month: number;
   gross: number;

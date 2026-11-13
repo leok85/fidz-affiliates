@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { Badge } from '../components/core/Badge';
 import { ReferralLinkBanner } from '../components/affiliate/ReferralLinkBanner';
 import { useBalance, useLedger, useProfile, useReferrals } from '../data/queries';
-import { percent, tierProgress } from '../data/tiers';
+import { MIN_WITHDRAWAL } from '../data/rules';
 import { ledgerBadge } from '../data/status';
-import { brl, firstName, int, monthYear } from '../utils/format';
+import { brl, firstName, monthYear } from '../utils/format';
 import { cx } from '../utils/cx';
 import shared from '../styles/shared.module.css';
 import styles from './HomeScreen.module.css';
@@ -21,7 +21,8 @@ export function HomeScreen() {
   const active = referrals.filter((r) => r.status === 'active').length;
   const trial = referrals.filter((r) => r.status === 'trial').length;
   const latest = ledger.filter((l) => l.kind === 'commission').slice(0, 4);
-  const tier = tierProgress(active);
+  const ready = balance.available >= MIN_WITHDRAWAL;
+  const pct = Math.min(100, Math.round((balance.available / MIN_WITHDRAWAL) * 100));
 
   return (
     <>
@@ -80,41 +81,31 @@ export function HomeScreen() {
 
         <div className={styles.goal}>
           <div className={styles.goal__header}>
-            <span className={styles.goal__eyebrow}>Seu nível</span>
-            <button type="button" className={styles.goal__link} onClick={() => navigate('/nivel')}>
-              Ver níveis →
+            <span className={styles.goal__eyebrow}>Próximo saque</span>
+            <button type="button" className={styles.goal__link} onClick={() => navigate('/ganhos')}>
+              Ver ganhos →
             </button>
           </div>
           <div className={styles.goal__points}>
-            <span className={styles.goal__value}>{percent(tier.current.rate)}</span>
-            <span className={styles.goal__unit}>de comissão · {tier.current.name}</span>
+            <span className={styles.goal__value}>{brl(balance.available)}</span>
+            <span className={styles.goal__unit}>disponível</span>
           </div>
-          {tier.next ? (
-            <>
-              <div className={styles.goal__progress}>
-                <div className={styles.goal__track}>
-                  <div className={styles.goal__fill} style={{ width: `${tier.pct}%` }} />
-                </div>
-                <div className={styles.goal__legend}>
-                  <span>{int(active)} pagando</span>
-                  <span>{int(tier.next.minStores)}</span>
-                </div>
-              </div>
-              <div className={styles.goal__next}>
-                <div>
-                  <div className={styles.goal__nextLabel}>Próximo nível · {tier.next.name}</div>
-                  <div className={styles.goal__nextPrize}>
-                    {percent(tier.next.rate)} com mais {tier.missing === 1 ? '1 loja' : `${int(tier.missing)} lojas`}
-                  </div>
-                </div>
-                <span className={styles.goal__pct}>{tier.pct}%</span>
-              </div>
-            </>
-          ) : (
-            <div className={styles.goal__next}>
-              <div className={styles.goal__nextPrize}>Você está no nível mais alto</div>
+          <div className={styles.goal__progress}>
+            <div className={styles.goal__track}>
+              <div className={styles.goal__fill} style={{ width: `${pct}%` }} />
             </div>
-          )}
+            <div className={styles.goal__legend}>
+              <span>{ready ? 'Pronto para sacar' : `Faltam ${brl(MIN_WITHDRAWAL - balance.available)}`}</span>
+              <span>{brl(MIN_WITHDRAWAL)}</span>
+            </div>
+          </div>
+          <div className={styles.goal__next}>
+            <div>
+              <div className={styles.goal__nextLabel}>Como você ganha</div>
+              <div className={styles.goal__nextPrize}>1ª mensalidade inteira + 10% por 2 anos</div>
+            </div>
+            <span className={styles.goal__pct}>{pct}%</span>
+          </div>
         </div>
       </div>
     </>

@@ -1,6 +1,6 @@
 import type { AffiliateAccess, AffiliateProfile, Balance, IncomeReport, LedgerEntry, PersonType, Referral, RejectedInvoice } from '../types';
 import { supabase } from '../lib/supabaseClient';
-import { MONTHS_LONG } from '../utils/format';
+import { brl, MONTHS_LONG } from '../utils/format';
 import { INVOICE_MAX_BYTES, MIN_WITHDRAWAL } from './rules';
 import { rpaTaxes, type MonthToDate, type RpaTaxes } from './taxes';
 import { demo } from './demo';
@@ -113,7 +113,7 @@ export function previewPfTaxes(gross: number): RpaTaxes {
 export async function requestWithdrawal({ invoice, personType }: { invoice: File | null; personType: PersonType }): Promise<WithdrawalResult> {
   const pj = personType === 'PJ';
   const gross = demo.balance.available;
-  if (gross < MIN_WITHDRAWAL) throw new Error('Saque a partir de R$ 30.');
+  if (gross < MIN_WITHDRAWAL) throw new Error(`Saque a partir de ${brl(MIN_WITHDRAWAL)}.`);
   if (pj && !invoice) throw new Error('Anexe a nota fiscal.');
   if (invoice) {
     const error = validateInvoice(invoice);

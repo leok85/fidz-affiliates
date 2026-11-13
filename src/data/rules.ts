@@ -1,20 +1,14 @@
-import type { CommissionTier } from '../types';
-
 /** Regras do programa, iguais às do design e dos Termos do afiliado. */
 export const PAYER = { name: 'Kofe Dev Ltda.', cnpj: '47.596.402/0001-64' };
-export const MIN_WITHDRAWAL = 30;
+/** Saque mínimo (decisão de 2026-11-12): com uma loja no Essencial, chega no 3º mês. O saldo não expira. */
+export const MIN_WITHDRAWAL = 100;
 export const GRACE_DAYS = 30;
-export const COMMISSIONED_INSTALLMENTS = 12;
+/**
+ * Comissão (decisão de 2026-11-12): o 1º pagamento da loja indicada vai inteiro para o afiliado, e depois
+ * 10% de cada pagamento, até 24 mensalidades. No anual, 1/12 da anuidade inteira + 10% do resto.
+ */
+export const COMMISSION_RATE = 0.1;
+export const COMMISSIONED_INSTALLMENTS = 24;
 export const INVOICE_MAX_BYTES = 5 * 1024 * 1024;
 
-/**
- * Níveis de comissão (decisão de 2026-11-12, no lugar de pontos e prêmios): a taxa de cada comissão depende
- * de quantas lojas indicadas estão pagando no momento do pagamento. O nível pode cair se lojas cancelarem;
- * comissões já geradas não mudam.
- */
-export const COMMISSION_TIERS: CommissionTier[] = [
-  { level: 1, name: 'Inicial', minStores: 1, rate: 0.1 },
-  { level: 2, name: 'Prata', minStores: 5, rate: 0.15 },
-  { level: 3, name: 'Ouro', minStores: 15, rate: 0.2 }
-];
 

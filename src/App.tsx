@@ -5,7 +5,6 @@ import { LoginScreen } from './screens/LoginScreen';
 import { HomeScreen } from './screens/HomeScreen';
 import { ReferralsScreen } from './screens/ReferralsScreen';
 import { EarningsScreen } from './screens/EarningsScreen';
-import { LevelScreen } from './screens/LevelScreen';
 import { PromoScreen } from './screens/PromoScreen';
 import { IncomeReportScreen } from './screens/IncomeReportScreen';
 
@@ -32,8 +31,7 @@ export function App() {
           <Route path="/" element={<HomeScreen />} />
           <Route path="/indicacoes" element={<ReferralsScreen />} />
           <Route path="/ganhos" element={<EarningsScreen />} />
-          <Route path="/nivel" element={<LevelScreen />} />
-          <Route path="/metas" element={<Navigate to="/nivel" replace />} />
+          <Route path="/metas" element={<Navigate to="/" replace />} />
           <Route path="/divulgar" element={<PromoScreen />} />
           <Route path="/informe" element={<IncomeReportScreen />} />
         </Route>

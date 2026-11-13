@@ -32,11 +32,12 @@ export function referralBadge(status: Referral['status']): { label: string; tone
 }
 
 export function referralCommission(r: Referral) {
-  if (r.plan === 'yearly') return 'Anuidade · comissão paga';
+  if (r.plan === 'yearly') return '1/12 da anuidade + 10% do resto · pago';
   if (r.status === 'trial') return 'Começa no 1º pagamento';
   if (r.status === 'canceled') return `Cancelou após ${r.paidInstallments} de ${COMMISSIONED_INSTALLMENTS} mensalidades`;
-  // A taxa de cada mensalidade é a do nível no dia do pagamento (níveis de comissão), então não vai aqui.
-  return `${r.paidInstallments} de ${COMMISSIONED_INSTALLMENTS} mensalidades comissionadas`;
+  return r.paidInstallments === 0
+    ? '1ª mensalidade inteira para você'
+    : `${r.paidInstallments} de ${COMMISSIONED_INSTALLMENTS} mensalidades · 1ª inteira, depois 10%`;
 }
 
 /** Monthly plans past their trial show a 12-installment progress bar. */
