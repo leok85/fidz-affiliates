@@ -1,6 +1,7 @@
 /* 24 grid, currentColor; same strokes as the design file. */
+import type React from 'react';
 
-function svg(children: JSX.Element, size = 19, stroke = 1.7) {
+function svg(children: React.JSX.Element, size = 19, stroke = 1.7) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round">
       {children}
