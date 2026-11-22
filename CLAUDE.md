@@ -27,6 +27,7 @@ Supabase, com a mesma estrutura do fidz-admin e do fidz-client-admin.
   quem tem linha ativa em `affiliates`. O código vem no template "Magic Link" do Supabase
   (`{{ .Token }}`, fonte em `supabase-email-templates/magic-link.html` no fidz-client-admin), o
   mesmo e-mail dos donos de loja; vale 1 hora.
+- Afiliado que se cadastrou pela Gestão (dono de loja Fidz): a comissão liberada abate a fatura da própria loja e entra no extrato como `credit` (estado `credited`, "Usado na fatura"); `get_affiliate_balance().credited` soma o que já foi usado, e o ganho total inclui esse valor.
 - Regras do programa ficam em `src/data/rules.ts` (iguais a `affiliate_program_rules()` no banco): 1ª
   mensalidade inteira, depois 10% até 24 mensalidades (anual: 1/12 inteiro + 10% do resto), carência de
   30 dias, saque mínimo de R$ 100. Só PJ por enquanto (PF em breve).

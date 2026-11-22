@@ -47,12 +47,13 @@ export async function fetchAffiliateAccess(): Promise<AffiliateAccess> {
 export async function fetchBalance(): Promise<Balance> {
   const { data, error } = await supabase.rpc('get_affiliate_balance').single();
   if (error) throw error;
-  const row = data as { available: number; grace: number; withdrawn: number; in_withdrawal: number };
+  const row = data as { available: number; grace: number; withdrawn: number; in_withdrawal: number; credited: number | null };
   return {
     available: Number(row.available),
     grace: Number(row.grace),
     withdrawn: Number(row.withdrawn),
-    inWithdrawal: Number(row.in_withdrawal)
+    inWithdrawal: Number(row.in_withdrawal),
+    credited: Number(row.credited ?? 0)
   };
 }
 
@@ -75,17 +76,19 @@ interface CommissionRow {
   id: number;
   paid_at: string;
   store: string;
-  kind: 'first' | 'recurring' | 'reversal';
+  kind: 'first' | 'recurring' | 'reversal' | 'credit';
   installments: number;
-  first_installment: number;
+  first_installment: number | null;
   amount: number;
-  state: 'grace' | 'available' | 'canceled';
+  state: 'grace' | 'available' | 'canceled' | 'withdrawn' | 'credited';
   releases_at: string;
 }
 
 /** Como cada comissão aparece no extrato (termos, seção 4: 1ª inteira, depois 10% até a 24ª). */
 export function commissionDescription(c: Pick<CommissionRow, 'kind' | 'installments' | 'first_installment'>) {
   if (c.kind === 'reversal') return 'Estorno: o pagamento foi reembolsado';
+  // Afiliado que é loja Fidz: a comissão abateu a fatura da própria loja.
+  if (c.kind === 'credit' || c.first_installment == null) return 'Desconto na sua fatura da Fidz';
   if (c.installments > 1) {
     const last = c.first_installment + c.installments - 1;
     return c.kind === 'first'

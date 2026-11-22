@@ -39,6 +39,7 @@ export type LedgerStatus =
   | 'canceled'
   | 'available'
   | 'withdrawn'
+  | 'credited'
   | 'paid'
   | 'processing'
   | 'invoice_review'
@@ -64,6 +65,8 @@ export interface Balance {
   withdrawn: number;
   /** In a withdrawal that is not paid yet (invoice in review, rejected or Pix pending). */
   inWithdrawal: number;
+  /** Used as a discount on the Fidz invoice of the affiliate's own store (signed up from the Gestão). */
+  credited: number;
 }
 
 export interface RejectedInvoice {
