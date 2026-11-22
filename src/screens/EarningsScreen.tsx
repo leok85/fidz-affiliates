@@ -67,9 +67,13 @@ export function EarningsScreen() {
           <div className={styles.earnings__note}>Libera 30 dias após o pagamento da loja.</div>
         </div>
         <div className={shared.card}>
-          <div className={shared.metric__label}>Já sacado</div>
-          <div className={styles.earnings__value}>{brl(balance.withdrawn)}</div>
-          <div className={styles.earnings__note}>Desde {monthYear(profile.since)}</div>
+          <div className={shared.metric__label}>{balance.credited > 0 ? 'Já recebido' : 'Já sacado'}</div>
+          <div className={styles.earnings__value}>{brl(balance.withdrawn + balance.credited)}</div>
+          <div className={styles.earnings__note}>
+            {balance.credited > 0
+              ? `${brl(balance.credited)} como desconto na fatura da Fidz`
+              : `Desde ${monthYear(profile.since)}`}
+          </div>
         </div>
       </div>
 

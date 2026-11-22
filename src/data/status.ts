@@ -12,6 +12,8 @@ export function ledgerBadge(entry: LedgerEntry): { label: string; tone: Tone } {
       return { label: 'Cancelada', tone: 'neutral' };
     case 'withdrawn':
       return { label: 'Sacado', tone: 'neutral' };
+    case 'credited':
+      return { label: 'Usado na fatura', tone: 'success' };
     case 'paid':
       return { label: 'Saque Pix', tone: 'success' };
     case 'processing':

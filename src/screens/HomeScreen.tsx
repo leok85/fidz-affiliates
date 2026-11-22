@@ -48,7 +48,7 @@ export function HomeScreen() {
         </div>
         <div className={shared.metric}>
           <div className={shared.metric__label}>Ganho total</div>
-          <div className={shared.metric__value}>{brl(balance.available + balance.grace + balance.withdrawn)}</div>
+          <div className={shared.metric__value}>{brl(balance.available + balance.grace + balance.withdrawn + balance.credited)}</div>
           <div className={shared.metric__note}>Desde {monthYear(profile.since)}</div>
         </div>
       </div>
